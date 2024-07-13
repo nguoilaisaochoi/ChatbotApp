@@ -18,10 +18,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.lehungg.rytongpt"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "permissions": ["INTERNET"],
+    "extra": {
+      "eas": {
+        "projectId": "e129177a-04d8-48d9-924b-337b02959be6"
+      }
     }
   }
 }
