@@ -21,7 +21,7 @@ const Historychat = () => {
   const { LoginData } = useSelector((state) => state.user);
   const { ChatlistData, ChatdeleteStatus } = useSelector((state) => state.chat);
   const { setMessages } = useContext(Appcontext);
-  const { setIsnew, setIdchatrecent, setFromhistory } = useContext(Appcontext);
+  const { setIsnew, setIdchatrecent, setFromhistory, setIssend } = useContext(Appcontext);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -46,7 +46,11 @@ const Historychat = () => {
       {
         text: "Ok",
         onPress: () => {
-          console.log(item);
+          setIsnew(true);
+          setMessages([]);
+          setIdchatrecent(null);
+          setIssend(false);
+          setFromhistory(false);
           dispatch(Chatdelete(item));
         },
       },
