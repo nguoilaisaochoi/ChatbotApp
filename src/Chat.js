@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -9,20 +9,25 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import LlamaAI from "llamaai";
-import { useSelector } from "react-redux";
+
+import { useDispatch, useSelector } from "react-redux";
+import { Chatadd, Chatlist, Chatrecent, generateTextThunk } from "./Reducer/ChatReducer";
+import { Appcontext } from "./Navigation/Appcontext";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Chat = () => {
   //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
   //AIzaSyCLU7SZ8jbf003tkE2DPtI2RgBLC0iLFyE
   const { LoginData } = useSelector((state) => state.user);
-  const [messages, setMessages] = useState([]);
+  const { ChatData, ChatStatus, ChatrecentData, GeneratedTextData, GeneratedTextStatus } =
+    useSelector((state) => state.chat);
+  const dispatch = useDispatch();
+  const { messages, setMessages, isNew, setIsnew, idchatrecent, fromHistory, isSend, setIssend } =
+    useContext(Appcontext);
   const [newMessage, setNewMessage] = useState("");
   const flatListRef = useRef(null);
-  const API_KEY = "AIzaSyCLU7SZ8jbf003tkE2DPtI2RgBLC0iLFyE";
-  const confirmAI = "(*hãy trả lời các câu hỏi bằng tiếng việt* Xin chào bạn,)";
-  const handSend = async () => {
+  const [isGen, setIsgen] = useState(false);
+  const handSend = () => {
     if (newMessage !== "") {
       const fromuser = [
         ...messages,
@@ -31,6 +36,10 @@ const Chat = () => {
       setMessages(fromuser);
       setNewMessage("");
       //Call API
+      dispatch(generateTextThunk(newMessage));
+      setIssend(true);
+      setIsgen(true);
+      /*
       try {
         const { GoogleGenerativeAI } = require("@google/generative-ai");
         const genAI = new GoogleGenerativeAI(API_KEY);
@@ -43,66 +52,57 @@ const Chat = () => {
         setMessages(fromAI);
       } catch (error) {
         console.error("Error generating text:", error);
-      }
+      }*/
     }
   };
 
   useEffect(() => {
-    flatListRef.current.scrollToEnd({ animated: true });
+    setTimeout(() => {
+      flatListRef.current.scrollToEnd({ animated: true });
+    }, 120);
+    dispatch(Chatlist(LoginData.data.username));
+    if (GeneratedTextStatus == "succeeded" && messages.length > 0) {
+      savechat();
+      console.log("thực hiện lưu chat");
+    }
   }, [messages]);
-  /*const generateText = async () => {
-    try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer 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", // Replace with your API key
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "user",
-              content: inputMessage,
-            },
-          ],
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const answer = data.choices[0].message.content;
-        setMessages([...messages, { name: "rytongpt", text: answer }]);
-        console.log(data);
-      } else {
-        console.error("Failed to fetch data");
-        const errorData = await response.json();
-        console.error("Error details:", errorData);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  // save chat api
+  const savechat = () => {
+    const firstMessageText = messages.length > 0 ? messages[0].text : "";
+    const body = {
+      username: LoginData.data.username,
+      text: messages,
+      name: firstMessageText,
+      id: isNew ? null : fromHistory ? idchatrecent : ChatrecentData.data._id,
+    };
+    dispatch(Chatadd(body));
+    console.log(body);
+    setIsnew(false);
   };
-*/
-  /*const generateText2 = async (Input) => {
-    try {
-      const { GoogleGenerativeAI } = require("@google/generative-ai");
-      console.log(Input);
-      const genAI = new GoogleGenerativeAI(API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `(Tiếng việt) ${Input}`;
-      const result = await model.generateContent(prompt);
-      const response = result.response;
-      const text = response.text();
-      console.log(messages);
-      ResAI("Rytongpt", text);
-      //const messagesWithAI =([...messages, { id: messages.length + 1, name: "Rytongpt", text: text }]);
-      //setMessages(messagesWithAI)
-    } catch (error) {
-      console.error("Error generating text:", error);
+  //update chathientai
+  useEffect(() => {
+    if (ChatStatus == "succeeded") {
+      dispatch(Chatrecent(LoginData.data.username));
+      dispatch(Chatlist(LoginData.data.username));
     }
-  };*/
+  }, [ChatStatus]);
+
+  //kq gen text
+  useEffect(() => {
+    if (GeneratedTextStatus === "succeeded" && isSend) {
+      const fromAI = [
+        ...messages,
+        { id: messages.length + 1, name: "RytonGPT", text: GeneratedTextData },
+      ];
+      setMessages(fromAI);
+      setIssend(false);
+      setIsgen(false);
+      dispatch(Chatlist(LoginData.data.username));
+    }
+    console.log(GeneratedTextStatus);
+  }, [GeneratedTextStatus, GeneratedTextData]);
   const chat = ({ item }) => {
+    //lam chu in dam
     const renderBoldText = (text) => {
       const parts = text.split("**");
       console.log(parts);
@@ -128,15 +128,6 @@ const Chat = () => {
   };
   return (
     <View style={styles.container}>
-      {/* header */}
-      <View style={styles.header}>
-        <TouchableOpacity activeOpacity={0.5}>
-          <Image style={styles.imgback} source={require("../assets/img/Back.png")} />
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5}>
-          <Image style={styles.imgback} source={require("../assets/img/Setting.png")} />
-        </TouchableOpacity>
-      </View>
       <View style={styles.chatContainer}>
         <FlatList
           ref={flatListRef}
@@ -156,10 +147,17 @@ const Chat = () => {
           />
           <TouchableOpacity
             onPress={() => {
-              handSend();
+              isGen ? null : handSend();
+              setIssend(true);
             }}
           >
-            <Image source={require("../assets/img/send.png")} style={styles.sendIcon} />
+            <Image
+              source={
+                isGen ? require("../assets/img/loadinggen.gif") : require("../assets/img/send.png")
+              }
+              style={styles.sendIcon}
+            />
+
           </TouchableOpacity>
         </View>
       </View>
@@ -172,6 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
+
   boxtext: {
     padding: "3%",
     paddingBottom: height * 0.03,
@@ -215,7 +214,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#A3A3A8",
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
     padding: 10,
     borderRadius: 7,
     height: height * 0.08,

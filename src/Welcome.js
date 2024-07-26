@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { SvgFromUri, SvgUri } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 import { Connect } from "./Reducer/UserReducer";
-
+import packageJson from "../package.json";
 const Welcome = (props) => {
   const dispatch = useDispatch();
   const { ConnectStatus } = useSelector((state) => state.user);
@@ -23,7 +23,11 @@ const Welcome = (props) => {
   }, [ConnectStatus]);
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require("../assets/img/logo.png")} />
+      <Image style={styles.image} source={require("../assets/img/Logo.png")} />
+      <View style={styles.box}>
+        <Text style={styles.txt1}>RytonGPT</Text>
+        <Text style={styles.txt2}>Version {packageJson.version} </Text>
+      </View>
     </View>
   );
 };
@@ -33,13 +37,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#3369ff",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   image: {
-    width: "69.87%",
-    height: "32.28%",
+    width: "63.87%",
+    height: "26.28%",
     resizeMode: "contain",
+  },
+  box: {
+    position: "absolute",
+    bottom: 0,
+    marginBottom: "2%",
+    alignItems: "center",
+  },
+  txt1: {
+    fontSize: 23,
+    fontWeight: "500",
+  },
+  txt2: {
+    marginTop: "2%",
+    fontSize: 12,
   },
 });

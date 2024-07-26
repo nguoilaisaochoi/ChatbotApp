@@ -31,6 +31,8 @@ const Register = (props) => {
   const Register = () => {
     if (Username == "" || Password == "" || Name == "" || ConfirmPassword == "") {
       Alert.alert("Thông báo", "Hãy nhập đầy đủ thông tin");
+    } else if (Password !== ConfirmPassword) {
+      Alert.alert("Thông báo", "2 mật khẩu không khớp");
     } else {
       const body = {
         username: Username,
@@ -43,7 +45,12 @@ const Register = (props) => {
   };
   useEffect(() => {
     if (RegStatus == "succeeded" && Isreg) {
-      navigation.goBack();
+      if (RegData.data != null) {
+        navigation.goBack();
+      } else {
+        Alert.alert("Thông báo", RegData.messenger);
+      }
+      console.log(RegData);
     }
   }, [RegStatus]);
   return (

@@ -17,7 +17,8 @@ const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Login = (props) => {
   const dispatch = useDispatch();
-  const { setIslogin } = useContext(Appcontext);
+  const { setIslogin, setMessages, setIsnew, setIdchatrecent, setIssend, setFromhistory } =
+    useContext(Appcontext);
   const { LoginData, LoginStatus } = useSelector((state) => state.user);
   const [Showpass, setShowpass] = useState(false);
   const [Username, setUsername] = useState("");
@@ -46,6 +47,11 @@ const Login = (props) => {
     console.log(LoginStatus);
     if (LoginStatus == "succeeded" && Islog) {
       if (LoginData.data != null) {
+        setIsnew(true);
+        setMessages([]);
+        setIdchatrecent(null);
+        setIssend(false);
+        setFromhistory(false);
         setIslogin(true);
       } else {
         Alert.alert("Thông báo", LoginData.messenger);
