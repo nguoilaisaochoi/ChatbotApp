@@ -8,11 +8,13 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
+  ToastAndroid,
 } from "react-native";
-
+import * as Clipboard from "expo-clipboard";
 import { useDispatch, useSelector } from "react-redux";
 import { Chatadd, Chatlist, Chatrecent, generateTextThunk } from "./Reducer/ChatReducer";
 import { Appcontext } from "./Navigation/Appcontext";
+import Markdown from "react-native-markdown-display";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Chat = () => {
@@ -27,6 +29,7 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   const flatListRef = useRef(null);
   const [isGen, setIsgen] = useState(false);
+  const [isCopy, setIscopy] = useState(false);
   const handSend = () => {
     if (newMessage !== "") {
       const fromuser = [
@@ -101,28 +104,26 @@ const Chat = () => {
     }
     console.log(GeneratedTextStatus);
   }, [GeneratedTextStatus, GeneratedTextData]);
-  const chat = ({ item }) => {
-    //lam chu in dam
-    const renderBoldText = (text) => {
-      const parts = text.split("**");
-      console.log(parts);
-      return parts.map((part, index) => {
-        if (index % 2 === 0) {
-          return <Text key={index}>{part}</Text>;
-        } else {
-          return (
-            <Text key={index} style={{ fontWeight: "bold" }}>
-              {part}
-            </Text>
-          );
-        }
-      });
+  const chat = ({ item, index }) => {
+    //copy texxt
+    const handlecopy = async () => {
+      await Clipboard.setStringAsync(item.text);
+      setIscopy(true);
+      ToastAndroid.show("Copied!", ToastAndroid.SHORT);
+      setTimeout(() => {
+        setIscopy(false);
+      }, 1000);
     };
 
     return (
       <View style={styles.message}>
-        <Text style={styles.senderName}>{item.name}</Text>
-        <Text style={styles.messageText}>{item.text}</Text>
+        <View style={styles.headerchat}>
+          <Text style={styles.senderName}>{item.name}</Text>
+          <TouchableOpacity style={styles.btncopy} onPress={() => handlecopy()}>
+            <Image style={styles.imgcopy} source={require("../assets/img/clipboard.png")} />
+          </TouchableOpacity>
+        </View>
+        <Markdown style={styles.messageText}>{item.text}</Markdown>
       </View>
     );
   };
@@ -144,6 +145,7 @@ const Chat = () => {
             value={newMessage}
             onChangeText={(data) => setNewMessage(data)}
             placeholder="Type your message here"
+            multiline={true}
           />
           <TouchableOpacity
             onPress={() => {
@@ -157,7 +159,6 @@ const Chat = () => {
               }
               style={styles.sendIcon}
             />
-
           </TouchableOpacity>
         </View>
       </View>
@@ -170,7 +171,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-
+  imgcopy: {
+    width: 20,
+    resizeMode: "contain",
+  },
+  btncopy: {
+    paddingLeft: "4%",
+    paddingRight: "4%",
+  },
+  headerchat: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   boxtext: {
     padding: "3%",
     paddingBottom: height * 0.03,
@@ -204,7 +217,6 @@ const styles = StyleSheet.create({
   },
   senderName: {
     fontWeight: "bold",
-    marginBottom: 5,
   },
   messageText: {
     fontSize: 16,
