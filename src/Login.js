@@ -61,7 +61,9 @@ const Login = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        <Text style={styles.welcome}>Đăng nhập tài khoản của bạn</Text>
+        <Text style={styles.welcome}>
+          Đăng nhập{"\n"}tài khoản{"\n"}của bạn
+        </Text>
         <View>
           <View style={styles.input1}>
             <TextInput
