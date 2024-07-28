@@ -25,11 +25,11 @@ const Main = () => {
       <DrawerContentScrollView {...props}>
         <View>
           <Text style={{ fontSize: 18, fontWeight: "500", marginLeft: "5%", marginTop: "5%" }}>
-            Welcome! {LoginData.data.name}
+            Chào mừng! {LoginData.data.name}
           </Text>
         </View>
         <DrawerItem
-          label="New chat"
+          label="Trò chuyện mới"
           onPress={() => {
             setIsnew(true);
             setMessages([]);
@@ -41,7 +41,7 @@ const Main = () => {
         />
         <DrawerItemList {...props} />
         <DrawerItem
-          label="Log Out"
+          label="Đăng xuất"
           onPress={() => {
             setIslogin(false);
           }}
@@ -59,10 +59,9 @@ const Main = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="Chat" component={Chat}></Drawer.Screen>
-      <Drawer.Screen name="History chat" component={Historychat}></Drawer.Screen>
+      <Drawer.Screen name="Lịch sử chat" component={Historychat}></Drawer.Screen>
     </Drawer.Navigator>
   );
 };
 
 export default Main;
-const styles = StyleSheet.create({});

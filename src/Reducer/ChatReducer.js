@@ -30,7 +30,7 @@ export const generateTextThunk = createAsyncThunk("chat/generateText", async (ne
         Authorization: "Bearer sk-proj-cXz1m60xX5MC1Z4P4aBVT3BlbkFJtkbHuQvXHjS3av1pLwZC",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         messages: [
           {
             role: "user",

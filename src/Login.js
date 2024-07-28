@@ -61,7 +61,7 @@ const Login = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        <Text style={styles.welcome}>Login Your Account</Text>
+        <Text style={styles.welcome}>Đăng nhập tài khoản của bạn</Text>
         <View>
           <View style={styles.input1}>
             <TextInput
@@ -97,11 +97,11 @@ const Login = (props) => {
 
         <View style={{ flexDirection: "column", width: "100%" }}>
           <TouchableOpacity style={styles.button} onPress={() => login()}>
-            <Text style={styles.text}>Login</Text>
+            <Text style={styles.text}>Đăng nhập</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cfgnewacc} onPress={() => goreg()} activeOpacity={0.5}>
-            <Text style={[styles.newacc, { color: "#ACADB9" }]}>Create New Account? </Text>
-            <Text style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}>Sign up</Text>
+            <Text style={[styles.newacc, { color: "#ACADB9" }]}>Bạn chưa có tài khoản? </Text>
+            <Text style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}>Đăng ký</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -56,7 +56,7 @@ const Register = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        <Text style={styles.welcome}>Create your Account</Text>
+        <Text style={styles.welcome}>Tạo tài khoản của bạn</Text>
         <View>
           <View style={styles.input1}>
             <TextInput
@@ -129,11 +129,11 @@ const Register = (props) => {
         </View>
 
         <TouchableOpacity style={styles.button} onPress={() => Register()} activeOpacity={0.5}>
-          <Text style={styles.text}>Register</Text>
+          <Text style={styles.text}>Tạo tài khoản</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cfgnewacc} onPress={() => gologin()} activeOpacity={0.5}>
-          <Text style={[styles.newacc, { color: "#ACADB9" }]}>Already Have An Account? </Text>
-          <Text style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}>Sign In</Text>
+          <Text style={[styles.newacc, { color: "#ACADB9" }]}>Đã có tài khoản? </Text>
+          <Text style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}>Đăng nhập</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04,
   },
   welcome: {
-    width: width * 0.5,
+    width: width * 0.6,
     fontSize: width * 0.1,
     fontWeight: "600",
     color: "#323142",

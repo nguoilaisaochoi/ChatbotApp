@@ -4,10 +4,10 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Image,
   FlatList,
   TouchableOpacity,
   Dimensions,
+  Image,
   ToastAndroid,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
@@ -21,7 +21,7 @@ const Chat = () => {
   //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
   //AIzaSyCLU7SZ8jbf003tkE2DPtI2RgBLC0iLFyE
   const { LoginData } = useSelector((state) => state.user);
-  const { ChatData, ChatStatus, ChatrecentData, GeneratedTextData, GeneratedTextStatus } =
+  const { ChatStatus, ChatrecentData, GeneratedTextData, GeneratedTextStatus } =
     useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const { messages, setMessages, isNew, setIsnew, idchatrecent, fromHistory, isSend, setIssend } =
@@ -29,7 +29,6 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   const flatListRef = useRef(null);
   const [isGen, setIsgen] = useState(false);
-  const [isCopy, setIscopy] = useState(false);
   const handSend = () => {
     if (newMessage !== "") {
       const fromuser = [
@@ -104,15 +103,11 @@ const Chat = () => {
     }
     console.log(GeneratedTextStatus);
   }, [GeneratedTextStatus, GeneratedTextData]);
-  const chat = ({ item, index }) => {
+  const chat = ({ item}) => {
     //copy texxt
     const handlecopy = async () => {
       await Clipboard.setStringAsync(item.text);
-      setIscopy(true);
-      ToastAndroid.show("Copied!", ToastAndroid.SHORT);
-      setTimeout(() => {
-        setIscopy(false);
-      }, 1000);
+      ToastAndroid.show("Đã sao chép vào bộ nhớ tạm!!", ToastAndroid.SHORT);
     };
 
     return (
@@ -144,7 +139,7 @@ const Chat = () => {
             style={styles.textInput}
             value={newMessage}
             onChangeText={(data) => setNewMessage(data)}
-            placeholder="Type your message here"
+            placeholder="Nhập tin nhắn của bạn ở đây"
             multiline={true}
           />
           <TouchableOpacity
@@ -208,8 +203,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   message: {
-    paddingTop: height * 0.02,
-    paddingBottom: height * 0.02,
+    paddingTop: height * 0.01,
+    paddingBottom: height * 0.01,
     paddingLeft: width * 0.1,
     paddingRight: width * 0.1,
     marginVertical: 5,

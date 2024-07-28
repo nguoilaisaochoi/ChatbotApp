@@ -41,7 +41,7 @@ const Historychat = () => {
   };
 
   const handledelete = (item) => {
-    Alert.alert("Confirm", "Are you sure? ", [
+    Alert.alert("Xác nhận", "Bạn muốn xoá đoạn chat này? ", [
       { text: "Hủy", styles: "cancel" },
       {
         text: "Ok",
