@@ -27,7 +27,7 @@ export const generateTextThunk = createAsyncThunk("chat/generateText", async (ne
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer sk-proj-cXz1m60xX5MC1Z4P4aBVT3BlbkFJtkbHuQvXHjS3av1pLwZC",
+        Authorization: "Bearer ****",
       },
       body: JSON.stringify({
         model: "gpt-4o",
