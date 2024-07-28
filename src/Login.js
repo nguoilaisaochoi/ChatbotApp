@@ -66,7 +66,7 @@ const Login = (props) => {
           <View style={styles.input1}>
             <TextInput
               style={styles.input2}
-              placeholder="Username"
+              placeholder="Tên tài khoản"
               onChangeText={(data) => setUsername(data)}
             />
           </View>
@@ -74,7 +74,7 @@ const Login = (props) => {
             <TextInput
               secureTextEntry={Showpass == false ? true : false}
               style={styles.input2}
-              placeholder="Password"
+              placeholder="Mật khẩu"
               onChangeText={(data) => setPassword(data)}
             />
             <TouchableOpacity

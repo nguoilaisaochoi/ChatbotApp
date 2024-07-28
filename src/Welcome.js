@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useEffect } from "react";
-import { SvgFromUri, SvgUri } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 import { Connect } from "./Reducer/UserReducer";
 import packageJson from "../package.json";
@@ -26,7 +25,7 @@ const Welcome = (props) => {
       <Image style={styles.image} source={require("../assets/img/Logo.png")} />
       <View style={styles.box}>
         <Text style={styles.txt1}>RytonGPT</Text>
-        <Text style={styles.txt2}>Version {packageJson.version} </Text>
+        <Text style={styles.txt2}>Phiên bản {packageJson.version} </Text>
       </View>
     </View>
   );

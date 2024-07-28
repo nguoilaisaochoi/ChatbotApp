@@ -61,7 +61,7 @@ const Register = (props) => {
           <View style={styles.input1}>
             <TextInput
               style={styles.input2}
-              placeholder="Username"
+              placeholder="Tên tài khoản"
               onChangeText={(data) => {
                 setUsername(data);
               }}
@@ -70,7 +70,7 @@ const Register = (props) => {
           <View style={styles.input1}>
             <TextInput
               style={styles.input2}
-              placeholder="Name"
+              placeholder="Họ tên"
               onChangeText={(data) => {
                 setName(data);
               }}
@@ -80,7 +80,7 @@ const Register = (props) => {
             <TextInput
               secureTextEntry={showpass == false ? true : false}
               style={styles.input2}
-              placeholder="Password"
+              placeholder="Mật khẩu"
               onChangeText={(data) => {
                 setPassword(data);
               }}
@@ -105,7 +105,7 @@ const Register = (props) => {
             <TextInput
               secureTextEntry={showpass2 == false ? true : false}
               style={styles.input2}
-              placeholder="ConfirmPassword"
+              placeholder="Xác nhận mật khẩu"
               onChangeText={(data) => {
                 setConfirmPassword(data);
               }}
