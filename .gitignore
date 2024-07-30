@@ -30,6 +30,10 @@ yarn-error.*
 
 # local env files
 .env*.local
+<<<<<<< HEAD
+
+=======
+>>>>>>> parent of 90825e6 (v1.2.6.2)
 
 # typescript
 *.tsbuildinfo

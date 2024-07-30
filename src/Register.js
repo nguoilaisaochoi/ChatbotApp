@@ -33,7 +33,7 @@ const Register = (props) => {
       Alert.alert("Thông báo", "Hãy nhập đầy đủ thông tin");
     } else if (Password !== ConfirmPassword) {
       Alert.alert("Thông báo", "2 mật khẩu không khớp");
-    } else {
+    }else {
       const body = {
         username: Username,
         password: Password,
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     marginBottom: "5%",
     borderRadius: 13,
+    elevation:5
   },
   input2: {
     fontSize: height * 0.02,

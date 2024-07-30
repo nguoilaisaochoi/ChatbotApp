@@ -164,10 +164,11 @@ const Chat = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
   },
   imgcopy: {
-    width: 20,
+    width: width*0.1,
+    height: width*0.05,
     resizeMode: "contain",
   },
   btncopy: {
@@ -211,6 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F8",
   },
   senderName: {
+    width:width*0.68,
     fontWeight: "bold",
   },
   messageText: {

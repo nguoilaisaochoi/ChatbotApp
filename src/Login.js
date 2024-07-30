@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     marginBottom: "10%",
     borderRadius: 13,
+    elevation: 5,
   },
   input2: {
     fontSize: height * 0.02,

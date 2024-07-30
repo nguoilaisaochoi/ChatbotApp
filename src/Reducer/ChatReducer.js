@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AxiosInstance from "../API/AxiosInstance";
 
+
 export const Chatadd = createAsyncThunk("chat/add", async (data) => {
   const response = await AxiosInstance.post("chat/add", data);
   return response.data;
@@ -21,13 +22,14 @@ export const Chatdelete = createAsyncThunk("chat/delete", async (data) => {
   return response.data;
 });
 
+const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 export const generateTextThunk = createAsyncThunk("chat/generateText", async (newMessage) => {
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer ****",
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: "gpt-4o",
