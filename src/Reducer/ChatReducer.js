@@ -23,6 +23,7 @@ export const Chatdelete = createAsyncThunk("chat/delete", async (data) => {
 });
 
 const apiKey = process.env.EXPO_PUBLIC_API_KEY;
+
 export const generateTextThunk = createAsyncThunk("chat/generateText", async (newMessage) => {
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
