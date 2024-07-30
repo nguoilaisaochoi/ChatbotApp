@@ -16,7 +16,7 @@ const Welcome = (props) => {
     if (ConnectStatus == "succeeded") {
       setTimeout(() => {
         navigation.navigate("login");
-      }, 1000);
+      }, 900);
     }
     console.log("Done");
   }, [ConnectStatus]);
