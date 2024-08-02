@@ -1,6 +1,5 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import React, { useContext } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -12,6 +11,7 @@ import Historychat from "../Historychat";
 import { useSelector } from "react-redux";
 import { Appcontext } from "./Appcontext";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Main = () => {
   const { LoginData } = useSelector((state) => state.user);
@@ -43,6 +43,7 @@ const Main = () => {
         <DrawerItem
           label="Đăng xuất"
           onPress={() => {
+            AsyncStorage.removeItem("isLogged");
             setIslogin(false);
           }}
         />

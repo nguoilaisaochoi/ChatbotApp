@@ -18,8 +18,6 @@ import Markdown from "react-native-markdown-display";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Chat = () => {
-  //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
-  //AIzaSyCLU7SZ8jbf003tkE2DPtI2RgBLC0iLFyE
   const { LoginData } = useSelector((state) => state.user);
   const { ChatStatus, ChatrecentData, GeneratedTextData, GeneratedTextStatus } =
     useSelector((state) => state.chat);
@@ -41,20 +39,6 @@ const Chat = () => {
       dispatch(generateTextThunk(newMessage));
       setIssend(true);
       setIsgen(true);
-      /*
-      try {
-        const { GoogleGenerativeAI } = require("@google/generative-ai");
-        const genAI = new GoogleGenerativeAI(API_KEY);
-        const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-pro-latest" });
-        const prompt = `${confirmAI} ${newMessage}`;
-        const result = await model.generateContent(prompt);
-        const response = result.response;
-        const text = response.text();
-        const fromAI = [...fromuser, { id: fromuser.length + 1, name: "Rytongpt", text: text }];
-        setMessages(fromAI);
-      } catch (error) {
-        console.error("Error generating text:", error);
-      }*/
     }
   };
 
@@ -78,7 +62,6 @@ const Chat = () => {
       id: isNew ? null : fromHistory ? idchatrecent : ChatrecentData.data._id,
     };
     dispatch(Chatadd(body));
-    console.log(body);
     setIsnew(false);
   };
   //update chathientai

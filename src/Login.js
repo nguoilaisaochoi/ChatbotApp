@@ -13,12 +13,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Log } from "./Reducer/UserReducer";
 import { Appcontext } from "./Navigation/Appcontext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Login = (props) => {
   const dispatch = useDispatch();
-  const { setIslogin, setMessages, setIsnew, setIdchatrecent, setIssend, setFromhistory } =
-    useContext(Appcontext);
+  const {
+    setIslogin,
+    setMessages,
+    setIsnew,
+    setIdchatrecent,
+    setIssend,
+    setFromhistory,
+  } = useContext(Appcontext);
   const { LoginData, LoginStatus } = useSelector((state) => state.user);
   const [Showpass, setShowpass] = useState(false);
   const [Username, setUsername] = useState("");
@@ -43,6 +50,10 @@ const Login = (props) => {
       dispatch(Log(body));
     }
   };
+  const save = async (key, value) => {
+    await AsyncStorage.setItem(key, value);
+  };
+
   useEffect(() => {
     console.log(LoginStatus);
     if (LoginStatus == "succeeded" && Islog) {
@@ -53,11 +64,13 @@ const Login = (props) => {
         setIssend(false);
         setFromhistory(false);
         setIslogin(true);
+        AsyncStorage.setItem("isLogged", "true");
       } else {
         Alert.alert("Thông báo", LoginData.messenger);
       }
     }
   }, [LoginStatus]);
+
   return (
     <View style={styles.container}>
       <View style={styles.body}>

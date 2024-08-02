@@ -1,25 +1,41 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
+import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Connect } from "./Reducer/UserReducer";
+import { Connect, Log } from "./Reducer/UserReducer";
 import packageJson from "../package.json";
+import { Appcontext } from "./Navigation/Appcontext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const Welcome = (props) => {
   const dispatch = useDispatch();
   const { ConnectStatus } = useSelector((state) => state.user);
   const { navigation } = props;
+  const { setIslogin } = useContext(Appcontext);
 
   useEffect(() => {
     dispatch(Connect());
   }, []);
 
+  //check logged
+  const getdata = async () => {
+    const value = await AsyncStorage.getItem("isLogged");
+    if (value === "true") {
+      console.log("isLogged!!");
+      setIslogin(true);
+    } else {
+      navigation.navigate("login");
+    }
+  };
+
   useEffect(() => {
     if (ConnectStatus == "succeeded") {
       setTimeout(() => {
-        navigation.navigate("login");
+        getdata();
       }, 900);
     }
     console.log("Done");
   }, [ConnectStatus]);
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("../assets/img/Logo.png")} />
