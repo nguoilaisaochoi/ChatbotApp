@@ -12,36 +12,101 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { useDispatch, useSelector } from "react-redux";
-import { Chatadd, Chatlist, Chatrecent, generateTextThunk } from "./Reducer/ChatReducer";
+import { Chatadd, Chatlist, Chatrecent, generateTextThunk, Uploadimg } from "./Reducer/ChatReducer";
 import { Appcontext } from "./Navigation/Appcontext";
 import Markdown from "react-native-markdown-display";
+import * as ImagePicker from "expo-image-picker";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
+
 const Chat = () => {
   const { LoginData } = useSelector((state) => state.user);
-  const { ChatStatus, ChatrecentData, GeneratedTextData, GeneratedTextStatus } =
-    useSelector((state) => state.chat);
+  const {
+    ChatStatus,
+    ChatrecentData,
+    GeneratedTextData,
+    GeneratedTextStatus,
+    UploadimgStatus,
+    UploadimgData,
+  } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const { messages, setMessages, isNew, setIsnew, idchatrecent, fromHistory, isSend, setIssend } =
     useContext(Appcontext);
   const [newMessage, setNewMessage] = useState("");
   const flatListRef = useRef(null);
   const [isGen, setIsgen] = useState(false);
+  const [image, setImage] = useState(null);
+  //gui chat
   const handSend = () => {
-    if (newMessage !== "") {
+    if (newMessage !== "" && image) {
+      dispatch(Uploadimg(image));
+    } else if (newMessage !== "") {
       const fromuser = [
         ...messages,
-        { id: messages.length + 1, name: LoginData.data.name, text: newMessage },
+        { id: messages.length + 1, role: "user", content: newMessage },
       ];
       setMessages(fromuser);
-      setNewMessage("");
+      const body = {
+        newMessage: newMessage,
+        messages: messages,
+      };
       //Call API
-      dispatch(generateTextThunk(newMessage));
+      dispatch(generateTextThunk(body));
+      setNewMessage("");
       setIssend(true);
       setIsgen(true);
     }
   };
+  //anh
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
+    if (!result.canceled) {
+      setImage(result.assets[0]);
+      console.log(result.assets[0]);
+    }
+  };
+
+  //state linkimg den api
+  useEffect(() => {
+    if (UploadimgStatus == "succeeded" && isSend) {
+      console.log("whut hien image");
+      console.log("UploadimgData" + UploadimgData);
+      const fromuser = [
+        ...messages,
+        {
+          id: messages.length + 1,
+          role: "user",
+          content: newMessage,
+          img: UploadimgData,
+        },
+      ];
+      setMessages(fromuser);
+      setNewMessage("");
+      const body = {
+        messages: messages,
+        newMessage: newMessage,
+        url: UploadimgData,
+      };
+      dispatch(generateTextThunk(body));
+      setImage(null);
+    }
+  }, [UploadimgStatus]);
+
+  //update chathientai
+  useEffect(() => {
+    if (ChatStatus == "succeeded") {
+      dispatch(Chatrecent(LoginData.data.username));
+      dispatch(Chatlist(LoginData.data.username));
+    }
+  }, [ChatStatus]);
+  //
   useEffect(() => {
     setTimeout(() => {
       flatListRef.current.scrollToEnd({ animated: true });
@@ -52,56 +117,59 @@ const Chat = () => {
       console.log("thực hiện lưu chat");
     }
   }, [messages]);
+
   // save chat api
   const savechat = () => {
-    const firstMessageText = messages.length > 0 ? messages[0].text : "";
+    const firstMessageText = messages.length > 0 ? messages[0].content : "";
     const body = {
       username: LoginData.data.username,
       text: messages,
       name: firstMessageText,
       id: isNew ? null : fromHistory ? idchatrecent : ChatrecentData.data._id,
+      img: UploadimgData ? null : UploadimgData,
     };
+    console.log(UploadimgData);
     dispatch(Chatadd(body));
     setIsnew(false);
   };
-  //update chathientai
-  useEffect(() => {
-    if (ChatStatus == "succeeded") {
-      dispatch(Chatrecent(LoginData.data.username));
-      dispatch(Chatlist(LoginData.data.username));
-    }
-  }, [ChatStatus]);
 
   //kq gen text
   useEffect(() => {
     if (GeneratedTextStatus === "succeeded" && isSend) {
-      const fromAI = [
-        ...messages,
-        { id: messages.length + 1, name: "RytonGPT", text: GeneratedTextData },
-      ];
-      setMessages(fromAI);
+      messages.push({ id: messages.length + 1, role: "assistant", content: GeneratedTextData });
+      setMessages([...messages]);
       setIssend(false);
       setIsgen(false);
       dispatch(Chatlist(LoginData.data.username));
     }
     console.log(GeneratedTextStatus);
   }, [GeneratedTextStatus, GeneratedTextData]);
-  const chat = ({ item}) => {
+
+  //flatlistitem
+  const chat = ({ item }) => {
     //copy texxt
     const handlecopy = async () => {
-      await Clipboard.setStringAsync(item.text);
+      await Clipboard.setStringAsync(item.content);
       ToastAndroid.show("Đã sao chép vào bộ nhớ tạm!!", ToastAndroid.SHORT);
     };
 
     return (
       <View style={styles.message}>
         <View style={styles.headerchat}>
-          <Text style={styles.senderName}>{item.name}</Text>
+          <Text style={styles.senderName}>{LoginData.data.username}</Text>
           <TouchableOpacity style={styles.btncopy} onPress={() => handlecopy()}>
             <Image style={styles.imgcopy} source={require("../assets/img/clipboard.png")} />
           </TouchableOpacity>
         </View>
-        <Markdown style={styles.messageText}>{item.text}</Markdown>
+        {item.img ? (
+          <Image
+            style={styles.imginput}
+            source={{
+              uri: `${item.img}`,
+            }}
+          />
+        ) : null}
+        <Markdown style={styles.messageText}>{item.content}</Markdown>
       </View>
     );
   };
@@ -117,6 +185,9 @@ const Chat = () => {
         {/* Chat*/}
       </View>
       <View style={styles.boxtext}>
+        <TouchableOpacity onPress={() => pickImage()}>
+          <Image style={styles.imgimg} source={require("../assets/img/image.png")} />
+        </TouchableOpacity>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.textInput}
@@ -149,9 +220,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  imginput: { width: width * 0.3, height: height * 0.1, marginTop: "5%", marginBottom: "2%" },
+  imgimg: {
+    width: width * 0.1,
+    height: width * 0.1,
+  },
   imgcopy: {
-    width: width*0.1,
-    height: width*0.05,
+    width: width * 0.1,
+    height: width * 0.05,
     resizeMode: "contain",
   },
   btncopy: {
@@ -164,8 +240,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   boxtext: {
+    flexDirection: "row",
     padding: "3%",
     paddingBottom: height * 0.03,
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   imgback: {
     aspectRatio: 1,
@@ -195,13 +274,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F8",
   },
   senderName: {
-    width:width*0.68,
+    width: width * 0.68,
     fontWeight: "bold",
   },
   messageText: {
     fontSize: 16,
   },
   inputContainer: {
+    width: "85%",
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
