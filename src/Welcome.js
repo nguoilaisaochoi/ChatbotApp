@@ -38,7 +38,7 @@ const Welcome = (props) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require("../assets/img/Logo.png")} />
+      <Image style={styles.image} source={require("../assets/img/logo.png")} />
       <View style={styles.box}>
         <Text style={styles.txt1}>RytonGPT</Text>
         <Text style={styles.txt2}>Phiên bản {packageJson.version} </Text>
