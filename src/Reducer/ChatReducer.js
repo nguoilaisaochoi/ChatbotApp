@@ -23,62 +23,92 @@ export const Chatdelete = createAsyncThunk("chat/delete", async (data) => {
 
 const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 
-export const generateTextThunk = createAsyncThunk("chat/generateText", async (data) => {
-  try {
-    // Thêm tin nhắn của người dùng vào lịch sử
-    const chatHistory = [
-      ...data.messages,
-      {
-        role: "user",
-        content:
-          data.url && data.url.length > 0
+export const generateTextThunk = createAsyncThunk(
+  "chat/generateText",
+  async (data) => {
+    try {
+      const previouschat = data.messages.map((message) => {
+        return {
+          role: message.role,
+          content: message.img
             ? [
                 {
                   type: "text",
-                  text: "Xem hình và trả lời câu hỏi" + data.newMessage,
+                  text: "Xem hình và trả lời câu hỏi" + message.content,
                 },
                 {
                   type: "image_url",
                   image_url: {
-                    url: data.url,
+                    url: message.img,
                   },
                 },
               ]
-            : data.newMessage,
-      },
-    ];
-    console.log(data);
-    console.log(chatHistory[0]);
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: chatHistory,
-      }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const answer = data.choices[0].message.content;
-      // Thêm phản hồi của chatbot vào lịch sử
-      chatHistory.push({
-        role: "assistant",
-        content: answer,
+            : message.content,
+        };
       });
-      
-      console.log("chatHistory" + chatHistory);
-      return answer;
-    } else {
-      throw new Error("API request failed");
+      // Thêm tin nhắn của người dùng vào lịch sử
+      const chatHistory = [
+        ...previouschat,
+        {
+          role: "user",
+          content:
+            data.url && data.url.length > 0
+              ? [
+                  {
+                    type: "text",
+                    text: "Xem hình và trả lời câu hỏi" + data.newMessage,
+                  },
+                  {
+                    type: "image_url",
+                    image_url: {
+                      url: data.url,
+                    },
+                  },
+                ]
+              : data.newMessage,
+        },
+      ];
+      {/*     
+        console.log("chatHistory");
+        chatHistory.forEach((item, index) => {
+        console.log(`Item ${index}:`, JSON.stringify(item, null, 2));
+      });
+       */}
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: chatHistory,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const answer = data.choices[0].message.content;
+        // Thêm phản hồi của chatbot vào lịch sử
+        chatHistory.push({
+          role: "assistant",
+          content: answer,
+        });
+
+        console.log("chatHistory" + chatHistory);
+        return answer;
+      } else {
+        const errorData = await response.json(); // Lấy nội dung lỗi từ phản hồi
+        console.error("Error response:", errorData); // In ra nội dung lỗi
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
   }
-});
+);
 
 export const Uploadimg = createAsyncThunk("chat/upimg", async (image) => {
   const imageUri = image.uri;
@@ -97,10 +127,13 @@ export const Uploadimg = createAsyncThunk("chat/upimg", async (image) => {
   formData.append("folder", "Imgdata");
 
   try {
-    const response = await fetch("https://api.cloudinary.com/v1_1/djywo5wza/image/upload", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/djywo5wza/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       const url = data.secure_url;

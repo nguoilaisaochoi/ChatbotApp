@@ -12,7 +12,13 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { useDispatch, useSelector } from "react-redux";
-import { Chatadd, Chatlist, Chatrecent, generateTextThunk, Uploadimg } from "./Reducer/ChatReducer";
+import {
+  Chatadd,
+  Chatlist,
+  Chatrecent,
+  generateTextThunk,
+  Uploadimg,
+} from "./Reducer/ChatReducer";
 import { Appcontext } from "./Navigation/Appcontext";
 import Markdown from "react-native-markdown-display";
 import * as ImagePicker from "expo-image-picker";
@@ -30,15 +36,25 @@ const Chat = () => {
     UploadimgData,
   } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
-  const { messages, setMessages, isNew, setIsnew, idchatrecent, fromHistory, isSend, setIssend } =
-    useContext(Appcontext);
+  const {
+    messages,
+    setMessages,
+    isNew,
+    setIsnew,
+    idchatrecent,
+    fromHistory,
+    isSend,
+    setIssend,
+  } = useContext(Appcontext);
   const [newMessage, setNewMessage] = useState("");
   const flatListRef = useRef(null);
   const [isGen, setIsgen] = useState(false);
   const [image, setImage] = useState(null);
+  const [addimg, setaddImg] = useState(false);
   //gui chat
   const handSend = () => {
     if (newMessage !== "" && image) {
+      setIsgen(true);
       dispatch(Uploadimg(image));
     } else if (newMessage !== "") {
       const fromuser = [
@@ -59,7 +75,7 @@ const Chat = () => {
   };
   //anh
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+    setaddImg(false);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -72,11 +88,22 @@ const Chat = () => {
       console.log(result.assets[0]);
     }
   };
+  const pickcamImage = async () => {
+    setaddImg(false);
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0]);
+      console.log(result.assets[0]);
+    }
+  };
 
   //state linkimg den api
   useEffect(() => {
     if (UploadimgStatus == "succeeded" && isSend) {
-      console.log("whut hien image");
       console.log("UploadimgData" + UploadimgData);
       const fromuser = [
         ...messages,
@@ -136,7 +163,11 @@ const Chat = () => {
   //kq gen text
   useEffect(() => {
     if (GeneratedTextStatus === "succeeded" && isSend) {
-      messages.push({ id: messages.length + 1, role: "assistant", content: GeneratedTextData });
+      messages.push({
+        id: messages.length + 1,
+        role: "assistant",
+        content: GeneratedTextData,
+      });
       setMessages([...messages]);
       setIssend(false);
       setIsgen(false);
@@ -158,7 +189,10 @@ const Chat = () => {
         <View style={styles.headerchat}>
           <Text style={styles.senderName}>{LoginData.data.username}</Text>
           <TouchableOpacity style={styles.btncopy} onPress={() => handlecopy()}>
-            <Image style={styles.imgcopy} source={require("../assets/img/clipboard.png")} />
+            <Image
+              style={styles.imgcopy}
+              source={require("../assets/img/clipboard.png")}
+            />
           </TouchableOpacity>
         </View>
         {item.img ? (
@@ -184,31 +218,79 @@ const Chat = () => {
         />
         {/* Chat*/}
       </View>
-      <View style={styles.boxtext}>
-        <TouchableOpacity onPress={() => pickImage()}>
-          <Image style={styles.imgimg} source={require("../assets/img/image.png")} />
-        </TouchableOpacity>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.textInput}
-            value={newMessage}
-            onChangeText={(data) => setNewMessage(data)}
-            placeholder="Nhập tin nhắn của bạn ở đây"
-            multiline={true}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              isGen ? null : handSend();
-              setIssend(true);
-            }}
-          >
+      {/* img input*/}
+      {addimg && (
+        <View
+          style={{
+            paddingLeft: "3%",
+          }}
+        >
+          <TouchableOpacity onPress={() => pickImage()}>
             <Image
-              source={
-                isGen ? require("../assets/img/loadinggen.gif") : require("../assets/img/send.png")
-              }
-              style={styles.sendIcon}
+              style={styles.imgimg}
+              source={require("../assets/img/image.png")}
+            />
+            <Text>Thư viện</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => pickcamImage()}>
+            <Image
+              style={styles.imgimg}
+              source={require("../assets/img/camera.png")}
+            />
+            <Text>Chụp ảnh</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      <View style={styles.boxtext}>
+        <View style={{ flexDirection: "column" }}>
+          <TouchableOpacity onPress={() => setaddImg(!addimg)}>
+            <Image
+              style={styles.imgimg}
+              source={require("../assets/img/addimg.png")}
             />
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.inputContainer}>
+          {image && (
+            <View>
+              <Image source={{ uri: image.uri }} style={styles.imginput} />
+              {!isGen && (
+                <TouchableOpacity
+                  style={styles.canceled}
+                  onPress={() => {
+                    setImage(null);
+                  }}
+                >
+                  <Text style={styles.textcanceled}>X</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+          <View style={styles.input}>
+            <TextInput
+              style={styles.textInput}
+              value={newMessage}
+              onChangeText={(data) => setNewMessage(data)}
+              placeholder="Nhập tin nhắn của bạn ở đây"
+              multiline={true}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                isGen ? null : handSend();
+                setIssend(true);
+              }}
+            >
+              <Image
+                source={
+                  isGen
+                    ? require("../assets/img/loadinggen.gif")
+                    : require("../assets/img/send.png")
+                }
+                style={styles.sendIcon}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -220,8 +302,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-  imginput: { width: width * 0.3, height: height * 0.1, marginTop: "5%", marginBottom: "2%" },
+  imginput: {
+    width: width * 0.3,
+    height: height * 0.1,
+    marginTop: "5%",
+    marginBottom: "2%",
+  },
   imgimg: {
+    margin: "2%",
     width: width * 0.1,
     height: width * 0.1,
   },
@@ -282,14 +370,37 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "85%",
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
     borderWidth: 1,
     borderColor: "#A3A3A8",
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 7,
-    height: height * 0.08,
+    minHeight: height * 0.08,
+  },
+  imginput: {
+    width: width * 0.3,
+    height: height * 0.1,
+    alignContent: "flex-start",
+  },
+  input: {
+    flexDirection: "row",
+  },
+  canceled: {
+    position: "absolute",
+    right: width * 0.43,
+    top: 0,
+    zIndex: 1,
+  },
+  textcanceled: {
+    fontWeight: "bold",
+    backgroundColor: "black",
+    paddingBottom: "1%",
+    paddingTop: "1%",
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    borderRadius: 55,
+    color: "white",
   },
   textInput: {
     flex: 1,
