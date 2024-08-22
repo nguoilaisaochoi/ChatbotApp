@@ -29,11 +29,22 @@ const Register = (props) => {
     navigation.goBack();
   };
   const Register = () => {
-    if (Username == "" || Password == "" || Name == "" || ConfirmPassword == "") {
+    if (
+      Username == "" ||
+      Password == "" ||
+      Name == "" ||
+      ConfirmPassword == ""
+    ) {
       Alert.alert("Thông báo", "Hãy nhập đầy đủ thông tin");
+    } else if (Username.length < 6) {
+      Alert.alert("Thông báo", "Tên tài khoản phải từ 6 ký tự trở lên");
+    } else if (Name.length > 20) {
+      Alert.alert("Thông báo", "Biệt danh chỉ tối đa 20 ký tự");
+    } else if (Password.length < 8) {
+      Alert.alert("Thông báo", "mật khẩu phải 8 kí tự trở lên");
     } else if (Password !== ConfirmPassword) {
       Alert.alert("Thông báo", "2 mật khẩu không khớp");
-    }else {
+    } else {
       const body = {
         username: Username,
         password: Password,
@@ -61,30 +72,39 @@ const Register = (props) => {
           <View style={styles.input1}>
             <TextInput
               style={styles.input2}
-              placeholder="Tên tài khoản"
+              placeholder="Tên tài khoản (6 ký tự trở lên)"
               onChangeText={(data) => {
                 setUsername(data);
               }}
             />
+            {Username.length >= 6 && (
+              <Text style={{ marginRight: "5%" }}>✅</Text>
+            )}
           </View>
           <View style={styles.input1}>
             <TextInput
               style={styles.input2}
-              placeholder="Họ tên"
+              placeholder="Biệt danh (tối đa 20 ký tự)"
               onChangeText={(data) => {
                 setName(data);
               }}
             />
+            {Name.length > 0 && Name.length <= 20 && (
+              <Text style={{ marginRight: "5%" }}>✅</Text>
+            )}
           </View>
           <View style={styles.input1}>
             <TextInput
               secureTextEntry={showpass == false ? true : false}
               style={styles.input2}
-              placeholder="Mật khẩu"
+              placeholder="Mật khẩu (8 ký tự trở lên)"
               onChangeText={(data) => {
                 setPassword(data);
               }}
             />
+            {Password.length >= 8 && (
+              <Text style={{ marginRight: "1%" }}>✅</Text>
+            )}
             <TouchableOpacity
               onPress={() => {
                 setShowpass(!showpass);
@@ -110,6 +130,9 @@ const Register = (props) => {
                 setConfirmPassword(data);
               }}
             />
+            {ConfirmPassword.length>=8 && Password == ConfirmPassword && (
+              <Text style={{ marginRight: "1%" }}>✅</Text>
+            )}
             <TouchableOpacity
               onPress={() => {
                 setShowpass2(!showpass2);
@@ -128,12 +151,24 @@ const Register = (props) => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => Register()} activeOpacity={0.5}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => Register()}
+          activeOpacity={0.5}
+        >
           <Text style={styles.text}>Tạo tài khoản</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cfgnewacc} onPress={() => gologin()} activeOpacity={0.5}>
-          <Text style={[styles.newacc, { color: "#ACADB9" }]}>Đã có tài khoản? </Text>
-          <Text style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}>Đăng nhập</Text>
+        <TouchableOpacity
+          style={styles.cfgnewacc}
+          onPress={() => gologin()}
+          activeOpacity={0.5}
+        >
+          <Text style={[styles.newacc, { color: "#ACADB9" }]}>
+            Đã có tài khoản?{" "}
+          </Text>
+          <Text style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}>
+            Đăng nhập
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -181,7 +216,7 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     marginBottom: "5%",
     borderRadius: 13,
-    elevation:5
+    elevation: 5,
   },
   input2: {
     fontSize: height * 0.02,
