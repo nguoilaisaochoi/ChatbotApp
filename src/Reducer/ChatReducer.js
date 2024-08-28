@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AxiosInstance from "../API/AxiosInstance";
+import { API_KEY_1, API_URL_2, API_KEY_2 } from "@env";
 
 export const Chatadd = createAsyncThunk("chat/add", async (data) => {
   const response = await AxiosInstance.post("chat/add", data);
@@ -7,12 +8,12 @@ export const Chatadd = createAsyncThunk("chat/add", async (data) => {
 });
 
 export const Chatrecent = createAsyncThunk("chat/recentchat", async (data) => {
-  const response = await AxiosInstance.get(`chat/recentchat?username=${data}`);
+  const response = await AxiosInstance.get(`chat/recentchat?id=${data}`);
   return response.data;
 });
 
 export const Chatlist = createAsyncThunk("chat/list", async (data) => {
-  const response = await AxiosInstance.get(`chat/list?username=${data}`);
+  const response = await AxiosInstance.get(`chat/list?id=${data}`);
   return response.data;
 });
 
@@ -21,8 +22,7 @@ export const Chatdelete = createAsyncThunk("chat/delete", async (data) => {
   return response.data;
 });
 
-const apiKey = process.env.EXPO_PUBLIC_API_KEY;
-
+//fetch api len openai
 export const generateTextThunk = createAsyncThunk(
   "chat/generateText",
   async (data) => {
@@ -43,7 +43,7 @@ export const generateTextThunk = createAsyncThunk(
                   },
                 },
               ]
-            : message.content,
+            : "Xin chào" + message.content,
         };
       });
       // Thêm tin nhắn của người dùng vào lịch sử
@@ -68,19 +68,21 @@ export const generateTextThunk = createAsyncThunk(
               : data.newMessage,
         },
       ];
-      {/*     
+      {
+        /*     
         console.log("chatHistory");
         chatHistory.forEach((item, index) => {
         console.log(`Item ${index}:`, JSON.stringify(item, null, 2));
       });
-       */}
+       */
+      }
       const response = await fetch(
         "https://api.openai.com/v1/chat/completions",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
+            Authorization: `Bearer ${API_KEY_1}`,
           },
           body: JSON.stringify({
             model: "gpt-4o",
@@ -110,6 +112,7 @@ export const generateTextThunk = createAsyncThunk(
   }
 );
 
+//dua anh uri thanh url
 export const Uploadimg = createAsyncThunk("chat/upimg", async (image) => {
   const imageUri = image.uri;
   const fileName = imageUri.split("/").pop();
@@ -122,18 +125,15 @@ export const Uploadimg = createAsyncThunk("chat/upimg", async (image) => {
     name: fileName,
   });
   formData.append("upload_preset", "woedj14o"); // specify the name of your upload preset
-  formData.append("api_key", "587196265671728"); // replace with your API key
+  formData.append("api_key", API_KEY_2); // replace with your API key
   formData.append("timestamp", Date.now() / 1000); // current timestamp
   formData.append("folder", "Imgdata");
 
   try {
-    const response = await fetch(
-      "https://api.cloudinary.com/v1_1/djywo5wza/image/upload",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const response = await fetch(API_URL_2, {
+      method: "POST",
+      body: formData,
+    });
     if (response.ok) {
       const data = await response.json();
       const url = data.secure_url;

@@ -32,7 +32,8 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "e129177a-04d8-48d9-924b-337b02959be6"
+        "projectId": "e129177a-04d8-48d9-924b-337b02959be6",
+        "api_url": "587196265671728"
       }
     },
     "plugins": [

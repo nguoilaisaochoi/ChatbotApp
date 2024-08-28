@@ -69,7 +69,12 @@ const Register = (props) => {
       <View style={styles.body}>
         <Text style={styles.welcome}>Tạo tài khoản của bạn</Text>
         <View>
-          <View style={styles.input1}>
+          <View
+            style={[
+              styles.input1,
+              Username.length >= 6 && { borderColor: "green", borderWidth: 1 },
+            ]}
+          >
             <TextInput
               style={styles.input2}
               placeholder="Tên tài khoản (6 ký tự trở lên)"
@@ -77,11 +82,14 @@ const Register = (props) => {
                 setUsername(data);
               }}
             />
-            {Username.length >= 6 && (
-              <Text style={{ marginRight: "5%" }}>✅</Text>
-            )}
           </View>
-          <View style={styles.input1}>
+          <View
+            style={[
+              styles.input1,
+              Name.length > 0 &&
+                Name.length <= 20 && { borderColor: "green", borderWidth: 1 },
+            ]}
+          >
             <TextInput
               style={styles.input2}
               placeholder="Biệt danh (tối đa 20 ký tự)"
@@ -89,11 +97,13 @@ const Register = (props) => {
                 setName(data);
               }}
             />
-            {Name.length > 0 && Name.length <= 20 && (
-              <Text style={{ marginRight: "5%" }}>✅</Text>
-            )}
           </View>
-          <View style={styles.input1}>
+          <View
+            style={[
+              styles.input1,
+              Password.length >= 8 && { borderColor: "green", borderWidth: 1 },
+            ]}
+          >
             <TextInput
               secureTextEntry={showpass == false ? true : false}
               style={styles.input2}
@@ -102,9 +112,6 @@ const Register = (props) => {
                 setPassword(data);
               }}
             />
-            {Password.length >= 8 && (
-              <Text style={{ marginRight: "1%" }}>✅</Text>
-            )}
             <TouchableOpacity
               onPress={() => {
                 setShowpass(!showpass);
@@ -121,7 +128,16 @@ const Register = (props) => {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.input1}>
+          <View
+            style={[
+              styles.input1,
+              ConfirmPassword.length >= 8 &&
+                Password == ConfirmPassword && {
+                  borderColor: "green",
+                  borderWidth: 1,
+                },
+            ]}
+          >
             <TextInput
               secureTextEntry={showpass2 == false ? true : false}
               style={styles.input2}
@@ -130,9 +146,6 @@ const Register = (props) => {
                 setConfirmPassword(data);
               }}
             />
-            {ConfirmPassword.length>=8 && Password == ConfirmPassword && (
-              <Text style={{ marginRight: "1%" }}>✅</Text>
-            )}
             <TouchableOpacity
               onPress={() => {
                 setShowpass2(!showpass2);
@@ -225,7 +238,7 @@ const styles = StyleSheet.create({
   },
   eye: {
     resizeMode: "contain",
-    flex: 0.4,
+    flex: 0.35,
   },
   button: {
     width: "100%",

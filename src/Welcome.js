@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  BackHandler,
+} from "react-native";
 import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Connect, Log } from "./Reducer/UserReducer";
@@ -6,9 +13,10 @@ import packageJson from "../package.json";
 import { Appcontext } from "./Navigation/Appcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 const Welcome = (props) => {
   const dispatch = useDispatch();
-  const { ConnectStatus } = useSelector((state) => state.user);
+  const { ConnectStatus, ConnectData } = useSelector((state) => state.user);
   const { navigation } = props;
   const { setIslogin } = useContext(Appcontext);
 
@@ -16,7 +24,7 @@ const Welcome = (props) => {
     dispatch(Connect());
   }, []);
 
-  //check logged
+  //check da dang nhap truoc do chua
   const getdata = async () => {
     const value = await AsyncStorage.getItem("isLogged");
     if (value === "true") {
@@ -29,9 +37,17 @@ const Welcome = (props) => {
 
   useEffect(() => {
     if (ConnectStatus == "succeeded") {
-      setTimeout(() => {
-        getdata();
-      }, 900);
+      if (packageJson.version == ConnectData.versionapp) {
+        setTimeout(() => {
+          getdata();
+        }, 900);
+      } else {
+        Alert.alert(
+          "Thông báo",
+          "Đã có phiên bản mới hơn và các phiên bản cũ không còn hỗ trợ",
+          [{ text: "Thoát", onPress: () => BackHandler.exitApp() }]
+        );
+      }
     }
     console.log("Done");
   }, [ConnectStatus]);

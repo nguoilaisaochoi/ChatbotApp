@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   eye: {
     resizeMode: "contain",
-    flex: 0.4,
+    flex: 0.35,
   },
   button: {
     width: "100%",

@@ -1,9 +1,8 @@
 import axios from "axios";
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import {API_URL_1} from "@env";
 
-const apiKey = process.env.EXPO_PUBLIC_API_URL;
 const AxiosInstance = axios.create({
-  baseURL: apiKey,
+  baseURL: API_URL_1,
   responseType: "json",
 });
 

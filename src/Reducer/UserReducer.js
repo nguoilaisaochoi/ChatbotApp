@@ -24,6 +24,7 @@ export const UserSlice = createSlice({
     LoginData: {},
     LoginStatus: "idle",
     ConnectStatus: "idle",
+    ConnectData: {},
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -55,6 +56,7 @@ export const UserSlice = createSlice({
       })
       .addCase(Connect.fulfilled, (state, action) => {
         state.ConnectStatus = "succeeded";
+        state.ConnectData = action.payload;
       })
       .addCase(Connect.rejected, (state, action) => {
         state.ConnectStatus = "failed";

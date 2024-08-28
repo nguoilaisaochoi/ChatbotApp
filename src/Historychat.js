@@ -21,7 +21,8 @@ const Historychat = () => {
   const { LoginData } = useSelector((state) => state.user);
   const { ChatlistData, ChatdeleteStatus } = useSelector((state) => state.chat);
   const { setMessages } = useContext(Appcontext);
-  const { setIsnew, setIdchatrecent, setFromhistory, setIssend } = useContext(Appcontext);
+  const { setIsnew, setIdchatrecent, setFromhistory, setIssend } =
+    useContext(Appcontext);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -32,6 +33,10 @@ const Historychat = () => {
     setFromhistory(true);
     navigation.navigate("Chat");
   };
+
+  useEffect(() => {
+    dispatch(Chatlist(LoginData.data._id));
+  }, []);
 
   const limitTextLength = (text, maxLength) => {
     if (text.length > maxLength) {
@@ -60,7 +65,7 @@ const Historychat = () => {
   useEffect(() => {
     console.log(ChatdeleteStatus);
     if (ChatdeleteStatus == "succeeded") {
-      dispatch(Chatlist(LoginData.data.username));
+      dispatch(Chatlist(LoginData.data._id));
     }
   }, [ChatdeleteStatus]);
 
@@ -72,13 +77,20 @@ const Historychat = () => {
           setchat(item);
         }}
         style={styles.item}
+        activeOpacity={0.8}
       >
         <View style={styles.box1}>
           <Text style={styles.txtedit1}>{limitTextLength(item.name, 30)}</Text>
           <Text style={styles.txtedit2}>{formattedDate}</Text>
         </View>
-        <TouchableOpacity style={styles.box2} onPress={() => handledelete(item._id)}>
-          <Image style={styles.imgedit} source={require("../assets/img/trash.png")} />
+        <TouchableOpacity
+          style={styles.box2}
+          onPress={() => handledelete(item._id)}
+        >
+          <Image
+            style={styles.imgedit}
+            source={require("../assets/img/trash.png")}
+          />
         </TouchableOpacity>
       </TouchableOpacity>
     );
@@ -114,23 +126,23 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   box1: {
-    padding: "3%",
+    padding: "2%",
   },
   box2: {
-    padding: "3%",
+    padding: "2%",
   },
   imgedit: {
     resizeMode: "contain",
-    width: width * 0.07,
+    width: width * 0.05,
   },
   txtedit1: {
-    fontSize: height * 0.02 + 2,
+    fontSize: height * 0.024,
     fontWeight: "500",
   },
 
   txtedit2: {
     marginTop: "4%",
-    fontSize: height * 0.02 - 2,
-    color: "#a0a0a5",
+    fontSize: height * 0.015 ,
+    opacity: 0.7,
   },
 });

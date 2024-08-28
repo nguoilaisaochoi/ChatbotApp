@@ -7,9 +7,9 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
-  Image,
   ToastAndroid,
 } from "react-native";
+import { Image } from "expo-image";
 import * as Clipboard from "expo-clipboard";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,9 +22,9 @@ import {
 import { Appcontext } from "./Navigation/Appcontext";
 import Markdown from "react-native-markdown-display";
 import * as ImagePicker from "expo-image-picker";
+import moment from "moment";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
-
 const Chat = () => {
   const { LoginData } = useSelector((state) => state.user);
   const {
@@ -51,6 +51,13 @@ const Chat = () => {
   const [isGen, setIsgen] = useState(false);
   const [image, setImage] = useState(null);
   const [addimg, setaddImg] = useState(false);
+  //dispatch danhsachchat
+  useEffect(() => {
+    dispatch(Chatlist(LoginData.data._id));
+  }, []);
+  //lay ngay hien tai
+  const currentDate = new Date();
+  const formattedDateTime = moment(currentDate).format("DD/MM/YYYY HH:mm:ss");
   //gui chat
   const handSend = () => {
     if (newMessage !== "" && image) {
@@ -59,7 +66,12 @@ const Chat = () => {
     } else if (newMessage !== "") {
       const fromuser = [
         ...messages,
-        { id: messages.length + 1, role: "user", content: newMessage },
+        {
+          id: messages.length + 1,
+          role: "user",
+          content: newMessage,
+          created: formattedDateTime,
+        },
       ];
       setMessages(fromuser);
       const body = {
@@ -73,7 +85,7 @@ const Chat = () => {
       setIsgen(true);
     }
   };
-  //anh
+  //chon anh tu thiet bi
   const pickImage = async () => {
     setaddImg(false);
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -88,6 +100,7 @@ const Chat = () => {
       console.log(result.assets[0]);
     }
   };
+  //chup hinh tu thiet bi
   const pickcamImage = async () => {
     setaddImg(false);
     const result = await ImagePicker.launchCameraAsync({
@@ -100,8 +113,7 @@ const Chat = () => {
       console.log(result.assets[0]);
     }
   };
-
-  //state linkimg den api
+  //dua anh da dua len cloudinary vao messages
   useEffect(() => {
     if (UploadimgStatus == "succeeded" && isSend) {
       console.log("UploadimgData" + UploadimgData);
@@ -112,6 +124,7 @@ const Chat = () => {
           role: "user",
           content: newMessage,
           img: UploadimgData,
+          created: formattedDateTime,
         },
       ];
       setMessages(fromuser);
@@ -126,40 +139,35 @@ const Chat = () => {
     }
   }, [UploadimgStatus]);
 
-  //update chathientai
+  //lay idchathientai sau khi thuc hien doan chat moi
   useEffect(() => {
     if (ChatStatus == "succeeded") {
-      dispatch(Chatrecent(LoginData.data.username));
-      dispatch(Chatlist(LoginData.data.username));
+      dispatch(Chatrecent(LoginData.data._id));
     }
   }, [ChatStatus]);
-  //
+  //thuc hien luu chat
   useEffect(() => {
     setTimeout(() => {
       flatListRef.current.scrollToEnd({ animated: true });
     }, 120);
-    dispatch(Chatlist(LoginData.data.username));
     if (GeneratedTextStatus == "succeeded" && messages.length > 0) {
       savechat();
       console.log("thực hiện lưu chat");
     }
   }, [messages]);
-
-  // save chat api
+  // save chat API nodejs
   const savechat = () => {
     const firstMessageText = messages.length > 0 ? messages[0].content : "";
     const body = {
-      username: LoginData.data.username,
+      iduser: LoginData.data._id,
       text: messages,
       name: firstMessageText,
       id: isNew ? null : fromHistory ? idchatrecent : ChatrecentData.data._id,
       img: UploadimgData ? null : UploadimgData,
     };
-    console.log(UploadimgData);
     dispatch(Chatadd(body));
     setIsnew(false);
   };
-
   //kq gen text
   useEffect(() => {
     if (GeneratedTextStatus === "succeeded" && isSend) {
@@ -167,28 +175,32 @@ const Chat = () => {
         id: messages.length + 1,
         role: "assistant",
         content: GeneratedTextData,
+        created: formattedDateTime,
       });
       setMessages([...messages]);
       setIssend(false);
       setIsgen(false);
-      dispatch(Chatlist(LoginData.data.username));
     }
     console.log(GeneratedTextStatus);
   }, [GeneratedTextStatus, GeneratedTextData]);
 
+  //copy text tu flatlist item
+  const handlecopy = async (content) => {
+    await Clipboard.setStringAsync(content);
+    ToastAndroid.show("Đã sao chép vào bộ nhớ tạm!!", ToastAndroid.SHORT);
+  };
   //flatlistitem
   const chat = ({ item }) => {
-    //copy texxt
-    const handlecopy = async () => {
-      await Clipboard.setStringAsync(item.content);
-      ToastAndroid.show("Đã sao chép vào bộ nhớ tạm!!", ToastAndroid.SHORT);
-    };
-
     return (
       <View style={styles.message}>
         <View style={styles.headerchat}>
-          <Text style={styles.senderName}>{LoginData.data.username}</Text>
-          <TouchableOpacity style={styles.btncopy} onPress={() => handlecopy()}>
+          <Text style={styles.senderName}>
+            {item.role == "assistant" ? "RytonGPT" : LoginData.data.username}
+          </Text>
+          <TouchableOpacity
+            style={styles.btncopy}
+            onPress={() => handlecopy(item.content)}
+          >
             <Image
               style={styles.imgcopy}
               source={require("../assets/img/clipboard.png")}
@@ -204,6 +216,9 @@ const Chat = () => {
           />
         ) : null}
         <Markdown style={styles.messageText}>{item.content}</Markdown>
+        {item.created ? (
+          <Text style={styles.txtcreated}>{item.created}</Text>
+        ) : null}
       </View>
     );
   };
@@ -215,42 +230,51 @@ const Chat = () => {
           data={messages}
           keyExtractor={(item) => item.id}
           renderItem={chat}
+          initialNumToRender={10}
         />
         {/* Chat*/}
       </View>
       {/* img input*/}
-      {addimg && (
+      <View style={styles.boxtext}>
         <View
           style={{
-            paddingLeft: "3%",
+            flexDirection: "column",
+            paddingRight: "1%",
           }}
         >
-          <TouchableOpacity onPress={() => pickImage()}>
-            <Image
-              style={styles.imgimg}
-              source={require("../assets/img/image.png")}
-            />
-            <Text>Thư viện</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => pickcamImage()}>
-            <Image
-              style={styles.imgimg}
-              source={require("../assets/img/camera.png")}
-            />
-            <Text>Chụp ảnh</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      <View style={styles.boxtext}>
-        <View style={{ flexDirection: "column" }}>
-          <TouchableOpacity onPress={() => setaddImg(!addimg)}>
+          <TouchableOpacity
+            style={{
+              alignItems: "center",
+              opacity: isGen ? 0.5 : 1,
+            }}
+            onPress={() => (isGen ? null : setaddImg(!addimg))}
+          >
             <Image
               style={styles.imgimg}
               source={require("../assets/img/addimg.png")}
             />
+            <Text style={{ fontSize: width * 0.03 }}>Chọn ảnh</Text>
           </TouchableOpacity>
         </View>
-
+        {/* select input img*/}
+        {addimg && (
+          <View style={styles.selimginput}>
+            <TouchableOpacity onPress={() => pickImage()}>
+              <Image
+                style={styles.imgimg}
+                source={require("../assets/img/image.png")}
+              />
+              <Text style={{ fontSize: width * 0.03 }}>Thư viện</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => pickcamImage()}>
+              <Image
+                style={styles.imgimg}
+                source={require("../assets/img/camera.png")}
+              />
+              <Text style={{ fontSize: width * 0.03 }}>Chụp ảnh</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.inputContainer}>
           {image && (
             <View>
@@ -262,7 +286,7 @@ const Chat = () => {
                     setImage(null);
                   }}
                 >
-                  <Text style={styles.textcanceled}>X</Text>
+                  <Text style={styles.textcanceled}>Hủy</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -302,21 +326,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  selimginput: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 20,
+  },
+  txtcreated: {
+    fontSize: width * 0.025,
+    opacity: 0.5,
+  },
   imginput: {
     width: width * 0.3,
     height: height * 0.1,
     marginTop: "5%",
-    marginBottom: "2%",
+    marginBottom: "3%",
   },
   imgimg: {
     margin: "2%",
     width: width * 0.1,
     height: width * 0.1,
+    alignSelf: "center",
   },
   imgcopy: {
     width: width * 0.1,
-    height: width * 0.05,
-    resizeMode: "contain",
+    height: width * 0.045,
+    contentFit: "contain",
   },
   btncopy: {
     paddingLeft: "4%",
@@ -330,14 +364,15 @@ const styles = StyleSheet.create({
   boxtext: {
     flexDirection: "row",
     padding: "3%",
+    paddingLeft: "1%",
     paddingBottom: height * 0.03,
     justifyContent: "space-around",
-    alignItems: "center",
+    alignItems: "flex-end",
   },
   imgback: {
     aspectRatio: 1,
     flex: 1,
-    resizeMode: "contain",
+    contentFit: "contain",
   },
   header: {
     marginTop: height * 0.04,
@@ -359,7 +394,7 @@ const styles = StyleSheet.create({
     paddingLeft: width * 0.1,
     paddingRight: width * 0.1,
     marginVertical: 5,
-    backgroundColor: "#F7F7F8",
+    backgroundColor: "#fafafa",
   },
   senderName: {
     width: width * 0.68,
@@ -369,7 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   inputContainer: {
-    width: "85%",
+    flexGrow: 1,
     flexDirection: "column",
     borderWidth: 1,
     borderColor: "#A3A3A8",
@@ -377,39 +412,41 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 7,
     minHeight: height * 0.08,
+    justifyContent: "center",
   },
-  imginput: {
+  imginput2: {
     width: width * 0.3,
     height: height * 0.1,
     alignContent: "flex-start",
   },
   input: {
     flexDirection: "row",
+    alignItems: "flex-end",
   },
   canceled: {
-    position: "absolute",
-    right: width * 0.43,
-    top: 0,
-    zIndex: 1,
+    width: width * 0.3,
+    marginBottom: "2%",
   },
   textcanceled: {
+    width: "100%",
     fontWeight: "bold",
     backgroundColor: "black",
-    paddingBottom: "1%",
-    paddingTop: "1%",
-    paddingLeft: "3%",
-    paddingRight: "3%",
-    borderRadius: 55,
     color: "white",
+    textAlign: "center",
+    borderRadius: 5,
+    fontSize: width * 0.04,
   },
   textInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: width * 0.035,
+    minHeight: height * 0.04,
+    maxHeight: height * 0.08,
   },
   sendIcon: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     marginLeft: 10,
+    marginBottom: "10%",
   },
 });
 
