@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "358681957288",
+    "project_id": "rytongpt-b5b01",
+    "storage_bucket": "rytongpt-b5b01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358681957288:android:7f31c120cc46f23c92c39d",
+        "android_client_info": {
+          "package_name": "com.lehungg.rytongpt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358681957288-5a88ssh8f9dsd1u8b90sthoscs94b3p3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lehungg.rytongpt",
+            "certificate_hash": "63adf789de164f1db5aabfd63f1a676965288f89"
+          }
+        },
+        {
+          "client_id": "358681957288-sc99n3hcngc0npi2agds95t2t0p7ru6g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUXMyOpxVo_AykAoPQOlpCxskBNjAxvmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358681957288-sc99n3hcngc0npi2agds95t2t0p7ru6g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

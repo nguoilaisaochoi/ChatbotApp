@@ -195,7 +195,7 @@ const Chat = () => {
       <View style={styles.message}>
         <View style={styles.headerchat}>
           <Text style={styles.senderName}>
-            {item.role == "assistant" ? "RytonGPT" : LoginData.data.username}
+            {item.role == "assistant" ? "RytonGPT" : LoginData.data.name}
           </Text>
           <TouchableOpacity
             style={styles.btncopy}
