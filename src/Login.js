@@ -50,6 +50,7 @@ const Login = (props) => {
         username: Username,
         password: Password,
       };
+      setIslog(true);
       dispatch(Log(body));
     } else {
       Alert.alert("Thông báo", "Hãy nhập đầy đủ thông tin");
@@ -90,7 +91,6 @@ const Login = (props) => {
   };
   useEffect(() => {
     if (RegStatus == "succeeded" && IsGGSignin) {
-      setIslog(true);
       login();
     }
   }, [RegStatus]);
@@ -107,6 +107,7 @@ const Login = (props) => {
         setIslogin(true);
         setIsGGSignin(false);
         AsyncStorage.setItem("isLogged", "true");
+        console.log("Đăng nhập thành công");
       } else {
         Alert.alert("Thông báo", LoginData.messenger);
       }
@@ -178,11 +179,37 @@ const Login = (props) => {
               Đăng ký
             </Text>
           </TouchableOpacity>
-          <GoogleSigninButton
-            onPress={() => {
-              signIn();
-            }}
-          />
+        </View>
+      </View>
+      <View>
+        <View style={styles.line} />
+        <Text style={styles.otherlogintxt}>Hoặc đăng nhập bằng</Text>
+        <View style={styles.ggandfb}>
+          <TouchableOpacity
+            style={[
+              styles.googleButton,
+              { backgroundColor: "rgba(212, 70, 56, 0.25)" },
+            ]}
+            onPress={() => signIn()}
+            activeOpacity={0.1}
+          >
+            <Text style={[styles.txtbuttonggfb, { color: "#D44638" }]}>
+              Google
+            </Text>
+          </TouchableOpacity>
+            {/**
+              <TouchableOpacity
+            style={[
+              styles.googleButton,
+              { backgroundColor: "rgba(66, 103, 178, 0.25)" },
+            ]}
+            activeOpacity={1}
+          >
+            <Text style={[styles.txtbuttonggfb, { color: "#4267B2" }]}>
+              Facebook
+            </Text>
+          </TouchableOpacity>
+             */}
         </View>
       </View>
     </View>
@@ -193,10 +220,47 @@ export default Login;
 
 const styles = StyleSheet.create({
   container: {
-    padding: "8%",
     flex: 1,
     backgroundColor: "#F7F8FA",
     justifyContent: "center",
+  },
+  txtbuttonggfb: {
+    fontSize: width * 0.03,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 2.55,
+    alignSelf: "center",
+  },
+  ggandfb: {
+    flexDirection: "row",
+    flexShrink: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    paddingLeft: "8%",
+    paddingRight: "8%",
+  },
+  otherlogintxt: {
+    color: "#ACADB9",
+    fontSize: 16,
+    fontWeight: "500",
+    wordWrap: "break-word",
+    alignSelf: "center",
+    letterSpacing: 1.5,
+    marginTop: "5%",
+    marginBottom: "5%",
+  },
+  line: {
+    borderWidth: 0.2,
+    flexShrink: 1,
+    backgroundColor: "#C2C3CB",
+    opacity: 0.1,
+  },
+  googleButton: {
+    borderRadius: 10,
+    flexGrow: 1,
+    paddingTop: "6%",
+    paddingBottom: "6%",
   },
   loadinggif: { flex: 0.05, resizeMode: "contain" },
   loading: {
@@ -222,8 +286,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: width * 0.04,
     fontWeight: 500,
+    letterSpacing:1.5
   },
   body: {
+    padding: "8%",
+    paddingBottom: "2%",
     justifyContent: "space-around",
     alignItems: "flex-start",
   },
@@ -248,6 +315,8 @@ const styles = StyleSheet.create({
     fontSize: height * 0.02,
     height: "100%",
     flex: 1,
+    letterSpacing:1.5,
+
   },
   eye: {
     resizeMode: "contain",
@@ -264,13 +333,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
     fontSize: width * 0.04,
+    letterSpacing: 1.5,
+    textTransform:'uppercase',
+    fontWeight: "500",
   },
   welcome: {
-    width: width * 0.5,
+    width: width * 0.6,
     fontSize: width * 0.1,
     fontWeight: "600",
     color: "#323142",
     marginBottom: "10%",
-    letterSpacing: -1.25,
+    letterSpacing: 1.25,
   },
 });

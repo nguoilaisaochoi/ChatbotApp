@@ -34,9 +34,6 @@ const Historychat = () => {
     navigation.navigate("Chat");
   };
 
-  useEffect(() => {
-    dispatch(Chatlist(LoginData.data._id));
-  }, []);
 
   const limitTextLength = (text, maxLength) => {
     if (text.length > maxLength) {
@@ -138,11 +135,14 @@ const styles = StyleSheet.create({
   txtedit1: {
     fontSize: height * 0.024,
     fontWeight: "500",
+    letterSpacing: 1,
+    height:height*0.03
   },
 
   txtedit2: {
     marginTop: "4%",
-    fontSize: height * 0.015 ,
+    fontSize: height * 0.015,
     opacity: 0.7,
+    letterSpacing: 1,
   },
 });

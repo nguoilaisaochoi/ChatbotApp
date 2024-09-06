@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: width * 0.04,
     fontWeight: 500,
+    letterSpacing:1.5
   },
   body: {
     alignItems: "flex-start",
@@ -235,6 +236,7 @@ const styles = StyleSheet.create({
     fontSize: height * 0.02,
     height: "100%",
     flex: 1,
+    letterSpacing:1.2
   },
   eye: {
     resizeMode: "contain",
@@ -251,13 +253,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
     fontSize: width * 0.04,
+    letterSpacing:1.5,
+    fontWeight:"500",
+    textTransform:'uppercase'
   },
   welcome: {
-    width: width * 0.6,
+    width: width * 0.7,
     fontSize: width * 0.1,
     fontWeight: "600",
     color: "#323142",
     marginBottom: "10%",
-    letterSpacing: -1.25,
+    letterSpacing: 1.25,
   },
 });

@@ -13,7 +13,6 @@ import packageJson from "../package.json";
 import { Appcontext } from "./Navigation/Appcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const Welcome = (props) => {
   const dispatch = useDispatch();
   const { ConnectStatus, ConnectData } = useSelector((state) => state.user);
@@ -86,9 +85,11 @@ const styles = StyleSheet.create({
   txt1: {
     fontSize: 23,
     fontWeight: "500",
+    letterSpacing: 1.5,
   },
   txt2: {
     marginTop: "2%",
     fontSize: 12,
+    letterSpacing: 1.5,
   },
 });

@@ -143,9 +143,10 @@ const Chat = () => {
   useEffect(() => {
     if (ChatStatus == "succeeded") {
       dispatch(Chatrecent(LoginData.data._id));
+      dispatch(Chatlist(LoginData.data._id));
     }
   }, [ChatStatus]);
-  //thuc hien luu chat
+  //thuc hien luu chat vao messages
   useEffect(() => {
     setTimeout(() => {
       flatListRef.current.scrollToEnd({ animated: true });
@@ -215,7 +216,7 @@ const Chat = () => {
             }}
           />
         ) : null}
-        <Markdown style={styles.messageText}>{item.content}</Markdown>
+        <Markdown style={styles}>{item.content}</Markdown>
         {item.created ? (
           <Text style={styles.txtcreated}>{item.created}</Text>
         ) : null}
@@ -253,7 +254,9 @@ const Chat = () => {
               style={styles.imgimg}
               source={require("../assets/img/addimg.png")}
             />
-            <Text style={{ fontSize: width * 0.03 }}>Chọn ảnh</Text>
+            <Text style={{ fontSize: width * 0.03, letterSpacing: 1 }}>
+              Chọn ảnh
+            </Text>
           </TouchableOpacity>
         </View>
         {/* select input img*/}
@@ -264,14 +267,14 @@ const Chat = () => {
                 style={styles.imgimg}
                 source={require("../assets/img/image.png")}
               />
-              <Text style={{ fontSize: width * 0.03 }}>Thư viện</Text>
+              <Text style={{ fontSize: width * 0.03,letterSpacing: 1  }}>Thư viện</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => pickcamImage()}>
               <Image
                 style={styles.imgimg}
                 source={require("../assets/img/camera.png")}
               />
-              <Text style={{ fontSize: width * 0.03 }}>Chụp ảnh</Text>
+              <Text style={{ fontSize: width * 0.03,letterSpacing: 1  }}>Chụp ảnh</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -296,7 +299,7 @@ const Chat = () => {
               style={styles.textInput}
               value={newMessage}
               onChangeText={(data) => setNewMessage(data)}
-              placeholder="Nhập tin nhắn của bạn ở đây"
+              placeholder="Tin nhắn"
               multiline={true}
             />
             <TouchableOpacity
@@ -330,10 +333,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 20,
+    marginRight:"2%"
   },
   txtcreated: {
-    fontSize: width * 0.025,
+    fontSize: width * 0.03,
     opacity: 0.5,
+    letterSpacing: 1,
   },
   imginput: {
     width: width * 0.3,
@@ -399,9 +404,8 @@ const styles = StyleSheet.create({
   senderName: {
     width: width * 0.68,
     fontWeight: "bold",
-  },
-  messageText: {
-    fontSize: 16,
+    letterSpacing:1,
+    fontSize:width*0.035
   },
   inputContainer: {
     flexGrow: 1,
@@ -438,15 +442,24 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: width * 0.035,
+    fontSize: width * 0.04,
     minHeight: height * 0.04,
     maxHeight: height * 0.08,
+    letterSpacing: 1.5,
   },
   sendIcon: {
     width: 25,
     height: 25,
     marginLeft: 10,
     marginBottom: "10%",
+  },
+  //text markdown npm
+  text: {
+    letterSpacing: 1,
+  },
+  strong: {
+    letterSpacing: 1,
+    fontWeight: "bold",
   },
 });
 

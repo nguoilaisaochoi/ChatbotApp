@@ -40,10 +40,11 @@ const Main = () => {
         <View>
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 19,
               fontWeight: "500",
               marginLeft: "5%",
               marginTop: "5%",
+              letterSpacing: 1.5,
             }}
           >
             Chào mừng! {LoginData.data.name}
@@ -59,6 +60,7 @@ const Main = () => {
             setFromhistory(false);
             navigation.navigate("Chat");
           }}
+          labelStyle={{ letterSpacing: 1.5, fontSize: 16 }}
         />
         <DrawerItemList {...props} />
         <DrawerItem
@@ -66,6 +68,7 @@ const Main = () => {
           onPress={() => {
             signOut();
           }}
+          labelStyle={{ letterSpacing: 1.5, fontSize: 16 }}
         />
       </DrawerContentScrollView>
     );
@@ -76,6 +79,10 @@ const Main = () => {
         drawerActiveBackgroundColor: "#323142",
         drawerActiveTintColor: "#fff",
         headerTitleAlign: "center",
+        drawerLabelStyle: {
+          letterSpacing: 1.5,
+          fontSize: 16,
+        },
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
