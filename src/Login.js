@@ -17,6 +17,7 @@ import {
   GoogleSignin,
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
+import * as Animatable from "react-native-animatable";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Login = (props) => {
@@ -36,7 +37,6 @@ const Login = (props) => {
   const [Password, setPassword] = useState("");
   const [Islog, setIslog] = useState(false);
   const [IsGGSignin, setIsGGSignin] = useState(false);
-
   const { navigation } = props;
   const showpassword = () => {
     setShowpass(!Showpass);
@@ -74,7 +74,7 @@ const Login = (props) => {
         setIsGGSignin(true);
         const username = response.data.user.email;
         const name = response.data.user.givenName;
-        const password = response.data.idToken;
+        const password = response.data.user.id;
         reg(username, name, password);
         //console.log({ userInfo: response.data });
       }
@@ -125,9 +125,9 @@ const Login = (props) => {
         </View>
       )}
       <View style={styles.body}>
-        <Text style={styles.welcome}>
+        <Animatable.Text animation={"fadeInLeft"} style={styles.welcome}>
           Đăng nhập{"\n"}tài khoản{"\n"}của bạn
-        </Text>
+        </Animatable.Text>
         <View>
           <View style={styles.input1}>
             <TextInput
@@ -162,7 +162,12 @@ const Login = (props) => {
         </View>
 
         <View style={{ flexDirection: "column", width: "100%" }}>
-          <TouchableOpacity style={styles.button} onPress={() => login()}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              login();
+            }}
+          >
             <Text style={styles.text}>Đăng nhập</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -197,7 +202,7 @@ const Login = (props) => {
               Google
             </Text>
           </TouchableOpacity>
-            {/**
+          {/**
               <TouchableOpacity
             style={[
               styles.googleButton,
@@ -286,7 +291,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: width * 0.04,
     fontWeight: 500,
-    letterSpacing:1.5
+    letterSpacing: 1.5,
   },
   body: {
     padding: "8%",
@@ -315,8 +320,7 @@ const styles = StyleSheet.create({
     fontSize: height * 0.02,
     height: "100%",
     flex: 1,
-    letterSpacing:1.5,
-
+    letterSpacing: 1.5,
   },
   eye: {
     resizeMode: "contain",
@@ -334,7 +338,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: width * 0.04,
     letterSpacing: 1.5,
-    textTransform:'uppercase',
+    textTransform: "uppercase",
     fontWeight: "500",
   },
   welcome: {

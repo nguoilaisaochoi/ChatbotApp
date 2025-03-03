@@ -23,6 +23,8 @@ import { Appcontext } from "./Navigation/Appcontext";
 import Markdown from "react-native-markdown-display";
 import * as ImagePicker from "expo-image-picker";
 import moment from "moment";
+import { getTheme } from "./Style/Theme";
+import { useRamUsage } from "./Ramuse";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Chat = () => {
@@ -51,6 +53,8 @@ const Chat = () => {
   const [isGen, setIsgen] = useState(false);
   const [image, setImage] = useState(null);
   const [addimg, setaddImg] = useState(false);
+  const [isDarkMode, setisDarkMode] = useState(true);
+  const styles = createStyles(isDarkMode, getTheme);
   //dispatch danhsachchat
   useEffect(() => {
     dispatch(Chatlist(LoginData.data._id));
@@ -254,9 +258,7 @@ const Chat = () => {
               style={styles.imgimg}
               source={require("../assets/img/addimg.png")}
             />
-            <Text style={{ fontSize: width * 0.03, letterSpacing: 1 }}>
-              Chọn ảnh
-            </Text>
+            <Text style={styles.txtselimg}>Chọn ảnh</Text>
           </TouchableOpacity>
         </View>
         {/* select input img*/}
@@ -267,14 +269,18 @@ const Chat = () => {
                 style={styles.imgimg}
                 source={require("../assets/img/image.png")}
               />
-              <Text style={{ fontSize: width * 0.03,letterSpacing: 1  }}>Thư viện</Text>
+              <Text style={styles.txtselimg}>
+                Thư viện
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => pickcamImage()}>
               <Image
                 style={styles.imgimg}
                 source={require("../assets/img/camera.png")}
               />
-              <Text style={{ fontSize: width * 0.03,letterSpacing: 1  }}>Chụp ảnh</Text>
+              <Text style={styles.txtselimg}>
+                Chụp ảnh
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -324,143 +330,157 @@ const Chat = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  selimginput: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 20,
-    marginRight:"2%"
-  },
-  txtcreated: {
-    fontSize: width * 0.03,
-    opacity: 0.5,
-    letterSpacing: 1,
-  },
-  imginput: {
-    width: width * 0.3,
-    height: height * 0.1,
-    marginTop: "5%",
-    marginBottom: "3%",
-  },
-  imgimg: {
-    margin: "2%",
-    width: width * 0.1,
-    height: width * 0.1,
-    alignSelf: "center",
-  },
-  imgcopy: {
-    width: width * 0.1,
-    height: width * 0.045,
-    contentFit: "contain",
-  },
-  btncopy: {
-    paddingLeft: "4%",
-    paddingRight: "4%",
-  },
-  headerchat: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  boxtext: {
-    flexDirection: "row",
-    padding: "3%",
-    paddingLeft: "1%",
-    paddingBottom: height * 0.03,
-    justifyContent: "space-around",
-    alignItems: "flex-end",
-  },
-  imgback: {
-    aspectRatio: 1,
-    flex: 1,
-    contentFit: "contain",
-  },
-  header: {
-    marginTop: height * 0.04,
-    marginLeft: "5%",
-    marginRight: "5%",
-    padding: "2%",
-    flexShrink: 1,
-    height: height * 0.08,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  chatContainer: {
-    flex: 1,
-  },
-  message: {
-    paddingTop: height * 0.01,
-    paddingBottom: height * 0.01,
-    paddingLeft: width * 0.1,
-    paddingRight: width * 0.1,
-    marginVertical: 5,
-    backgroundColor: "#fafafa",
-  },
-  senderName: {
-    width: width * 0.68,
-    fontWeight: "bold",
-    letterSpacing:1,
-    fontSize:width*0.035
-  },
-  inputContainer: {
-    flexGrow: 1,
-    flexDirection: "column",
-    borderWidth: 1,
-    borderColor: "#A3A3A8",
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 7,
-    minHeight: height * 0.08,
-    justifyContent: "center",
-  },
-  imginput2: {
-    width: width * 0.3,
-    height: height * 0.1,
-    alignContent: "flex-start",
-  },
-  input: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-  },
-  canceled: {
-    width: width * 0.3,
-    marginBottom: "2%",
-  },
-  textcanceled: {
-    width: "100%",
-    fontWeight: "bold",
-    backgroundColor: "black",
-    color: "white",
-    textAlign: "center",
-    borderRadius: 5,
-    fontSize: width * 0.04,
-  },
-  textInput: {
-    flex: 1,
-    fontSize: width * 0.04,
-    minHeight: height * 0.04,
-    maxHeight: height * 0.08,
-    letterSpacing: 1.5,
-  },
-  sendIcon: {
-    width: 25,
-    height: 25,
-    marginLeft: 10,
-    marginBottom: "10%",
-  },
-  //text markdown npm
-  text: {
-    letterSpacing: 1,
-  },
-  strong: {
-    letterSpacing: 1,
-    fontWeight: "bold",
-  },
-});
+const createStyles = (isDarkMode) => {
+  const theme = getTheme(isDarkMode);
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.backgroundColor,
+    },
+    selimginput: {
+      flexDirection: "row",
+      justifyContent: "center",
+      gap: 20,
+      marginRight: "2%",
+    },
+    txtcreated: {
+      fontSize: width * 0.03,
+      opacity: 0.5,
+      letterSpacing: 1,
+      color: theme.textColor,
+    },
+    imginput: {
+      width: width * 0.3,
+      height: height * 0.1,
+      marginTop: "5%",
+      marginBottom: "3%",
+    },
+    imgimg: {
+      margin: "2%",
+      width: width * 0.1,
+      height: width * 0.1,
+      alignSelf: "center",
+      tintColor: theme.textColor,
+    },
+    imgcopy: {
+      width: width * 0.1,
+      height: width * 0.045,
+      contentFit: "contain",
+    },
+    btncopy: {
+      paddingLeft: "4%",
+      paddingRight: "4%",
+    },
+    headerchat: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    boxtext: {
+      flexDirection: "row",
+      padding: "3%",
+      paddingLeft: "1%",
+      paddingBottom: height * 0.03,
+      justifyContent: "space-around",
+      alignItems: "flex-end",
+    },
+    imgback: {
+      aspectRatio: 1,
+      flex: 1,
+      contentFit: "contain",
+    },
+    header: {
+      marginTop: height * 0.04,
+      marginLeft: "5%",
+      marginRight: "5%",
+      padding: "2%",
+      flexShrink: 1,
+      height: height * 0.08,
+      justifyContent: "space-between",
+      alignItems: "center",
+      flexDirection: "row",
+    },
+    chatContainer: {
+      flex: 1,
+    },
+    message: {
+      paddingTop: height * 0.01,
+      paddingBottom: height * 0.01,
+      paddingLeft: width * 0.1,
+      paddingRight: width * 0.1,
+      marginVertical: 5,
+      backgroundColor: theme.itemchatColor,
+    },
+    senderName: {
+      width: width * 0.68,
+      fontWeight: "bold",
+      letterSpacing: 1,
+      fontSize: width * 0.035,
+      color: theme.textColor,
+    },
+    inputContainer: {
+      flexGrow: 1,
+      flexDirection: "column",
+      borderWidth: 1,
+      borderColor: "#A3A3A8",
+      backgroundColor: theme.inputColor,
+      padding: 10,
+      borderRadius: 7,
+      minHeight: height * 0.08,
+      justifyContent: "center",
+    },
+    imginput2: {
+      width: width * 0.3,
+      height: height * 0.1,
+      alignContent: "flex-start",
+    },
+    input: {
+      flexDirection: "row",
+      alignItems: "flex-end",
+    },
+    canceled: {
+      width: width * 0.3,
+      marginBottom: "2%",
+    },
+    textcanceled: {
+      width: "100%",
+      fontWeight: "bold",
+      backgroundColor: "black",
+      color: "white",
+      textAlign: "center",
+      borderRadius: 5,
+      fontSize: width * 0.04,
+    },
+    textInput: {
+      flex: 1,
+      fontSize: width * 0.04,
+      minHeight: height * 0.04,
+      maxHeight: height * 0.08,
+      letterSpacing: 1.5,
+    },
+    sendIcon: {
+      width: 25,
+      height: 25,
+      marginLeft: 10,
+      marginBottom: "10%",
+    },
+    txtselimg: {
+      fontSize: width * 0.03,
+      letterSpacing: 1,
+      color: theme.textColor,
+    },
+    //text markdown npm
+    body: {
+      color: theme.textColor,
+    },
+    text: {
+      letterSpacing: 1,
+    },
+    strong: {
+      letterSpacing: 1,
+      fontWeight: "bold",
+    },
+  });
+};
 
 export default Chat;

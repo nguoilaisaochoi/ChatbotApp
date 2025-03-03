@@ -36,7 +36,7 @@ const Main = () => {
   };
   const CustomDrawerContent = (props) => {
     return (
-      <DrawerContentScrollView {...props}>
+      <DrawerContentScrollView>
         <View>
           <Text
             style={{
