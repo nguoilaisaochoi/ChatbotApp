@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ToastAndroid,
+  Appearance,
 } from "react-native";
 import { Image } from "expo-image";
 import * as Clipboard from "expo-clipboard";
@@ -24,7 +25,6 @@ import Markdown from "react-native-markdown-display";
 import * as ImagePicker from "expo-image-picker";
 import moment from "moment";
 import { getTheme } from "./Style/Theme";
-import { useRamUsage } from "./Ramuse";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Chat = () => {
@@ -54,7 +54,26 @@ const Chat = () => {
   const [image, setImage] = useState(null);
   const [addimg, setaddImg] = useState(false);
   const [isDarkMode, setisDarkMode] = useState(true);
-  const styles = createStyles(isDarkMode, getTheme);
+  const styles = createStyles(isDarkMode);
+  const selectedTheme = useSelector((state) => state.user.Theme);
+  //check che do he thong
+  useEffect(() => {
+    let subscription;
+    if (selectedTheme == "system") {
+      const colorScheme = Appearance.getColorScheme();
+      setisDarkMode(colorScheme == "light" ? false : true);
+      subscription = Appearance.addChangeListener(({ colorScheme }) => {
+        setisDarkMode(colorScheme == "light" ? false : true);
+      });
+    } else {
+      setisDarkMode(selectedTheme == "light" ? false : true);
+    }
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, [selectedTheme]);
   //dispatch danhsachchat
   useEffect(() => {
     dispatch(Chatlist(LoginData.data._id));
@@ -269,18 +288,14 @@ const Chat = () => {
                 style={styles.imgimg}
                 source={require("../assets/img/image.png")}
               />
-              <Text style={styles.txtselimg}>
-                Thư viện
-              </Text>
+              <Text style={styles.txtselimg}>Thư viện</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => pickcamImage()}>
               <Image
                 style={styles.imgimg}
                 source={require("../assets/img/camera.png")}
               />
-              <Text style={styles.txtselimg}>
-                Chụp ảnh
-              </Text>
+              <Text style={styles.txtselimg}>Chụp ảnh</Text>
             </TouchableOpacity>
           </View>
         )}
