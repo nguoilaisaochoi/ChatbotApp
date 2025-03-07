@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
   Dimensions,
+  Appearance,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 import moment from "moment";
+import { getTheme } from "./Style/Theme";
 
 const Historychat = () => {
   const { LoginData } = useSelector((state) => state.user);
@@ -25,6 +27,27 @@ const Historychat = () => {
     useContext(Appcontext);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [isDarkMode, setisDarkMode] = useState(true);
+  const styles = createStyles(isDarkMode);
+  const selectedTheme = useSelector((state) => state.user.Theme);
+  //check che do he thong
+  useEffect(() => {
+    let subscription;
+    if (selectedTheme == "system") {
+      const colorScheme = Appearance.getColorScheme();
+      setisDarkMode(colorScheme == "light" ? false : true);
+      subscription = Appearance.addChangeListener(({ colorScheme }) => {
+        setisDarkMode(colorScheme == "light" ? false : true);
+      });
+    } else {
+      setisDarkMode(selectedTheme == "light" ? false : true);
+    }
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, [selectedTheme]);
 
   const setchat = (item) => {
     setMessages(item.text);
@@ -33,7 +56,6 @@ const Historychat = () => {
     setFromhistory(true);
     navigation.navigate("Chat");
   };
-
 
   const limitTextLength = (text, maxLength) => {
     if (text.length > maxLength) {
@@ -107,42 +129,48 @@ const Historychat = () => {
 
 export default Historychat;
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    flex: 1,
-  },
-  item: {
-    width: "90%",
-    backgroundColor: "#fff",
-    margin: "3%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderRadius: 12,
-    elevation: 5,
-  },
-  box1: {
-    padding: "2%",
-  },
-  box2: {
-    padding: "2%",
-  },
-  imgedit: {
-    resizeMode: "contain",
-    width: width * 0.05,
-  },
-  txtedit1: {
-    fontSize: height * 0.024,
-    fontWeight: "500",
-    letterSpacing: 1,
-    height:height*0.03
-  },
+const createStyles = (isDarkMode) => {
+  const theme = getTheme(isDarkMode);
+  return StyleSheet.create({
+    container: {
+      backgroundColor: theme.backgroundColor,
+      flex: 1,
+    },
+    item: {
+      width: "90%",
+      backgroundColor: theme.itemchatColor,
+      margin: "3%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      borderRadius: 12,
+      elevation: 5,
+    },
+    box1: {
+      padding: "2%",
+    },
+    box2: {
+      padding: "2%",
+    },
+    imgedit: {
+      resizeMode: "contain",
+      width: width * 0.05,
+      tintColor: theme.textColor,
+    },
+    txtedit1: {
+      fontSize: height * 0.024,
+      fontWeight: "500",
+      letterSpacing: 1,
+      height: height * 0.03,
+      color: theme.textColor,
+    },
 
-  txtedit2: {
-    marginTop: "4%",
-    fontSize: height * 0.015,
-    opacity: 0.7,
-    letterSpacing: 1,
-  },
-});
+    txtedit2: {
+      marginTop: "4%",
+      fontSize: height * 0.015,
+      opacity: 0.7,
+      letterSpacing: 1,
+      color: theme.textColor,
+    },
+  });
+};

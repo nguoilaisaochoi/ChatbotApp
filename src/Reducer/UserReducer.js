@@ -25,8 +25,13 @@ export const UserSlice = createSlice({
     LoginStatus: "idle",
     ConnectStatus: "idle",
     ConnectData: {},
+    Theme:false
   },
-  reducers: {},
+  reducers: {
+    setThemme(state, action) {
+      state.Theme = action.payload; 
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(Reg.pending, (state, action) => {
@@ -65,4 +70,6 @@ export const UserSlice = createSlice({
   },
 });
 
+export const { setThemme } = UserSlice.actions
 export default UserSlice.reducer;
+

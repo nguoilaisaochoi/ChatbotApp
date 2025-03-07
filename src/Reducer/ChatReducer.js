@@ -27,6 +27,7 @@ export const generateTextThunk = createAsyncThunk(
   "chat/generateText",
   async (data) => {
     try {
+      //lọc các đoạn chat trước đó có hình hay không (2 kiêu khác nhau)
       const previouschat = data.messages.map((message) => {
         return {
           role: message.role,
