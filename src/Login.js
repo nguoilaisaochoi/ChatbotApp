@@ -18,6 +18,7 @@ import {
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
 import * as Animatable from "react-native-animatable";
+import { Translate } from "./Translate";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Login = (props) => {
@@ -126,7 +127,7 @@ const Login = (props) => {
       )}
       <View style={styles.body}>
         <Animatable.Text animation={"fadeInLeft"} style={styles.welcome}>
-          Đăng nhập{"\n"}tài khoản{"\n"}của bạn
+          {Translate("signin")}{"\n"}{Translate("toyour")}{"\n"}{Translate("account")}
         </Animatable.Text>
         <View>
           <View style={styles.input1}>

@@ -41,6 +41,7 @@ const Main = () => {
     } else {
       setisDarkMode(selectedTheme == "light" ? false : true);
     }
+
     return () => {
       if (subscription) {
         console.log("đã huỷ sub");
