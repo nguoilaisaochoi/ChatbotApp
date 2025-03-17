@@ -12,6 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Reg } from "./Reducer/UserReducer";
+import { Translate } from "./Translate";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Register = (props) => {
@@ -67,7 +68,7 @@ const Register = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        <Text style={styles.welcome}>Tạo tài khoản của bạn</Text>
+        <Text style={styles.welcome}>{Translate("createyouraccount")}</Text>
         <View>
           <View
             style={[
@@ -77,7 +78,7 @@ const Register = (props) => {
           >
             <TextInput
               style={styles.input2}
-              placeholder="Tên tài khoản (6 ký tự trở lên)"
+              placeholder={Translate("accountnamereg")}
               onChangeText={(data) => {
                 setUsername(data);
               }}
@@ -92,7 +93,7 @@ const Register = (props) => {
           >
             <TextInput
               style={styles.input2}
-              placeholder="Biệt danh (tối đa 20 ký tự)"
+              placeholder={Translate("nickname")}
               onChangeText={(data) => {
                 setName(data);
               }}
@@ -107,7 +108,7 @@ const Register = (props) => {
             <TextInput
               secureTextEntry={showpass == false ? true : false}
               style={styles.input2}
-              placeholder="Mật khẩu (8 ký tự trở lên)"
+              placeholder={Translate("passwordreg")}
               onChangeText={(data) => {
                 setPassword(data);
               }}
@@ -141,7 +142,7 @@ const Register = (props) => {
             <TextInput
               secureTextEntry={showpass2 == false ? true : false}
               style={styles.input2}
-              placeholder="Xác nhận mật khẩu"
+              placeholder={Translate("confirmpassword")}
               onChangeText={(data) => {
                 setConfirmPassword(data);
               }}
@@ -169,7 +170,7 @@ const Register = (props) => {
           onPress={() => Register()}
           activeOpacity={0.5}
         >
-          <Text style={styles.text}>Tạo tài khoản</Text>
+          <Text style={styles.text}>{Translate("signup")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.cfgnewacc}
@@ -177,10 +178,10 @@ const Register = (props) => {
           activeOpacity={0.5}
         >
           <Text style={[styles.newacc, { color: "#ACADB9" }]}>
-            Đã có tài khoản?{" "}
+            {Translate("alreadyhaveanaccount")}{" "}
           </Text>
           <Text style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}>
-            Đăng nhập
+            {Translate("signin")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: width * 0.04,
     fontWeight: 500,
-    letterSpacing:1.5
+    letterSpacing: 1.5,
   },
   body: {
     alignItems: "flex-start",
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     fontSize: height * 0.02,
     height: "100%",
     flex: 1,
-    letterSpacing:1.2
+    letterSpacing: 1.2,
   },
   eye: {
     resizeMode: "contain",
@@ -253,9 +254,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
     fontSize: width * 0.04,
-    letterSpacing:1.5,
-    fontWeight:"500",
-    textTransform:'uppercase'
+    letterSpacing: 1.5,
+    fontWeight: "500",
+    textTransform: "uppercase",
   },
   welcome: {
     width: width * 0.7,
