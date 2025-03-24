@@ -58,7 +58,7 @@ const Welcome = (props) => {
       <View style={styles.box}>
         <Text style={styles.txt1}>RytonGPT</Text>
         <Text style={styles.txt2}>
-          {Translate("version")} {packageJson.version}{" "}
+          {Translate("version")} {packageJson.version}{"(beta)"}
         </Text>
       </View>
     </View>
