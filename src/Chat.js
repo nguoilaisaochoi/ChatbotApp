@@ -25,6 +25,7 @@ import Markdown from "react-native-markdown-display";
 import * as ImagePicker from "expo-image-picker";
 import moment from "moment";
 import { getTheme } from "./Style/Theme";
+import { Translate } from "./Translate";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Chat = () => {
@@ -216,7 +217,7 @@ const Chat = () => {
   //flatlistitem
   const chat = ({ item }) => {
     return (
-      <View style={styles.message}>
+      <View style={[styles.message]}>
         <View style={styles.headerchat}>
           <Text style={styles.senderName}>
             {item.role == "assistant" ? "RytonGPT" : LoginData.data.name}
@@ -277,7 +278,7 @@ const Chat = () => {
               style={styles.imgimg}
               source={require("../assets/img/addimg.png")}
             />
-            <Text style={styles.txtselimg}>Chọn ảnh</Text>
+            <Text style={styles.txtselimg}>{Translate("selectphoto")}</Text>
           </TouchableOpacity>
         </View>
         {/* select input img*/}
@@ -288,14 +289,14 @@ const Chat = () => {
                 style={styles.imgimg}
                 source={require("../assets/img/image.png")}
               />
-              <Text style={styles.txtselimg}>Thư viện</Text>
+              <Text style={styles.txtselimg}>{Translate("library")}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => pickcamImage()}>
               <Image
                 style={styles.imgimg}
                 source={require("../assets/img/camera.png")}
               />
-              <Text style={styles.txtselimg}>Chụp ảnh</Text>
+              <Text style={styles.txtselimg}>{Translate("takephoto")}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -310,7 +311,7 @@ const Chat = () => {
                     setImage(null);
                   }}
                 >
-                  <Text style={styles.textcanceled}>Hủy</Text>
+                  <Text style={styles.textcanceled}>{Translate("cancel")}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -320,7 +321,8 @@ const Chat = () => {
               style={styles.textInput}
               value={newMessage}
               onChangeText={(data) => setNewMessage(data)}
-              placeholder="Tin nhắn"
+              placeholder={Translate("entermessage")}
+              placeholderTextColor="gray"
               multiline={true}
             />
             <TouchableOpacity
@@ -425,6 +427,7 @@ const createStyles = (isDarkMode) => {
       paddingRight: width * 0.1,
       marginVertical: 5,
       backgroundColor: theme.itemchatColor,
+      elevation: 0.5,
     },
     senderName: {
       width: width * 0.68,
@@ -472,12 +475,14 @@ const createStyles = (isDarkMode) => {
       minHeight: height * 0.04,
       maxHeight: height * 0.08,
       letterSpacing: 1.5,
+      color: theme.textColor,
     },
     sendIcon: {
       width: 25,
       height: 25,
       marginLeft: 10,
       marginBottom: "10%",
+      tintColor: theme.textColor,
     },
     txtselimg: {
       fontSize: width * 0.03,

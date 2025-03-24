@@ -109,8 +109,6 @@ const Login = (props) => {
         setIsGGSignin(false);
         AsyncStorage.setItem("isLogged", "true");
         console.log("Đăng nhập thành công");
-      } else {
-        Alert.alert(Translate("notice"), LoginData.messenger);
       }
     }
   }, [LoginStatus]);
@@ -137,7 +135,7 @@ const Login = (props) => {
           <View style={styles.input1}>
             <TextInput
               style={styles.input2}
-              placeholder={Translate("accountname")}
+              placeholder={Translate("username")}
               onChangeText={(data) => setUsername(data)}
             />
           </View>

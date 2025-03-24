@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { getTheme } from "../Style/Theme";
 import ConfigTheme from "../ConfigTheme";
+import { Translate } from "../Translate";
 
 const Main = () => {
   const { LoginData } = useSelector((state) => state.user);
@@ -30,7 +31,7 @@ const Main = () => {
   useEffect(() => {
     let subscription;
     if (selectedTheme == "system") {
-      console.log("đã bật sub");
+      console.log("đã bật subscript");
       const colorScheme = Appearance.getColorScheme();
       console.log(`1.Chế độ hiện tại: ${colorScheme}`);
       setisDarkMode(colorScheme == "light" ? false : true);
@@ -44,7 +45,7 @@ const Main = () => {
 
     return () => {
       if (subscription) {
-        console.log("đã huỷ sub");
+        console.log("đã huỷ subscript");
         subscription.remove();
       }
     };
@@ -70,10 +71,10 @@ const Main = () => {
     return (
       <DrawerContentScrollView>
         <View>
-          <Text style={styles.txthead}>Chào mừng! {LoginData.data.name}</Text>
+          <Text style={styles.txthead}>{Translate('wellcome')} {LoginData.data.name} !</Text>
         </View>
         <DrawerItem
-          label="Trò chuyện mới"
+          label={Translate("newchat")}
           onPress={() => {
             setIsnew(true);
             setMessages([]);
@@ -86,7 +87,7 @@ const Main = () => {
         />
         <DrawerItemList {...props} />
         <DrawerItem
-          label="Đăng xuất"
+          label={Translate('logout')}
           onPress={() => {
             signOut();
           }}
@@ -112,9 +113,9 @@ const Main = () => {
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen name="Chat" component={Chat} />
-      <Drawer.Screen name="Lịch sử chat" component={Historychat} />
-      <Drawer.Screen name="Giao diện" component={ConfigTheme} />
+      <Drawer.Screen name={Translate('chat')} component={Chat} />
+      <Drawer.Screen name={Translate('chathistory')} component={Historychat} />
+      <Drawer.Screen name={Translate('theme')} component={ConfigTheme} />
     </Drawer.Navigator>
   );
 };

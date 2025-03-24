@@ -1,8 +1,6 @@
 import {
   View,
-  Text,
   StyleSheet,
-  TouchableOpacity,
   Appearance,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -10,6 +8,7 @@ import { getTheme } from "./Style/Theme";
 import OptionTheme from "./Component/OptionTheme";
 import { useDispatch, useSelector } from "react-redux";
 import { setThemme } from "./Reducer/UserReducer";
+import { Translate } from "./Translate";
 
 const ConfigTheme = () => {
   const dispath = useDispatch();
@@ -41,17 +40,17 @@ const ConfigTheme = () => {
     <View style={styles.container}>
       <OptionTheme
         onPress={() => setSelectedTheme("light")}
-        text="Sáng"
+        text={Translate("light")}
         selectedTheme={selectedTheme == "light" ?? null}
       />
       <OptionTheme
         onPress={() => setSelectedTheme("dark")}
-        text="Tối"
+        text={Translate("dark")}
         selectedTheme={selectedTheme == "dark" ?? null}
       />
       <OptionTheme
         onPress={() => setSelectedTheme("system")}
-        text="Theo thiết bị"
+        text={Translate("device")}
         theme={"system"}
         selectedTheme={selectedTheme == "system" ?? null}
       />

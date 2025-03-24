@@ -18,6 +18,7 @@ const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 import moment from "moment";
 import { getTheme } from "./Style/Theme";
+import { Translate } from "./Translate";
 
 const Historychat = () => {
   const { LoginData } = useSelector((state) => state.user);
@@ -65,8 +66,8 @@ const Historychat = () => {
   };
 
   const handledelete = (item) => {
-    Alert.alert("Xác nhận", "Bạn muốn xoá đoạn chat này? ", [
-      { text: "Hủy", styles: "cancel" },
+    Alert.alert(Translate('confirm'), Translate("wantdeletethischat"), [
+      { text: Translate("Cancel"), styles: "cancel" },
       {
         text: "Ok",
         onPress: () => {

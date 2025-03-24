@@ -25,35 +25,32 @@ const Register = (props) => {
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [Name, setName] = useState("");
   const [Isreg, setIsReg] = useState(false);
+  const [correct, setCorrect] = useState(false);
   const { navigation } = props;
   const gologin = () => {
     navigation.goBack();
   };
+  useEffect(() => {
+    Username == "" ||
+    Password == "" ||
+    Name == "" ||
+    ConfirmPassword == "" ||
+    Username.length < 6 ||
+    Name.length > 20 ||
+    Password.length < 8 ||
+    Password !== ConfirmPassword
+      ? setCorrect(false)
+      : setCorrect(true);
+  }, [Username, Password, Name, ConfirmPassword]);
+  
   const Register = () => {
-    if (
-      Username == "" ||
-      Password == "" ||
-      Name == "" ||
-      ConfirmPassword == ""
-    ) {
-      Alert.alert("Thông báo", "Hãy nhập đầy đủ thông tin");
-    } else if (Username.length < 6) {
-      Alert.alert("Thông báo", "Tên tài khoản phải từ 6 ký tự trở lên");
-    } else if (Name.length > 20) {
-      Alert.alert("Thông báo", "Biệt danh chỉ tối đa 20 ký tự");
-    } else if (Password.length < 8) {
-      Alert.alert("Thông báo", "mật khẩu phải 8 kí tự trở lên");
-    } else if (Password !== ConfirmPassword) {
-      Alert.alert("Thông báo", "2 mật khẩu không khớp");
-    } else {
-      const body = {
-        username: Username,
-        password: Password,
-        name: Name,
-      };
-      setIsReg(true);
-      dispatch(Reg(body));
-    }
+    const body = {
+      username: Username,
+      password: Password,
+      name: Name,
+    };
+    setIsReg(true);
+    dispatch(Reg(body));
   };
   useEffect(() => {
     if (RegStatus == "succeeded" && Isreg) {
@@ -93,7 +90,7 @@ const Register = (props) => {
           >
             <TextInput
               style={styles.input2}
-              placeholder={Translate("nickname")}
+              placeholder={Translate("fullnamereg")}
               onChangeText={(data) => {
                 setName(data);
               }}
@@ -166,8 +163,8 @@ const Register = (props) => {
         </View>
 
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => Register()}
+          style={[styles.button, { opacity: correct ? 1 : 0.5 }]}
+          onPress={() => (correct ? Register() : null)}
           activeOpacity={0.5}
         >
           <Text style={styles.text}>{Translate("signup")}</Text>
