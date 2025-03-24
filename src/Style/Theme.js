@@ -1,4 +1,4 @@
-export const Lightmode = {
+const Lightmode = {
   backgroundColor: "white",
   inputColor: "white",
   boderinputColor: "#676767",
@@ -8,7 +8,7 @@ export const Lightmode = {
   drawerActiveTintColor: "#A0A0A5",
   borderColor: "gray",
 };
-export const Darkmode = {
+const Darkmode = {
   backgroundColor: "#141718",
   inputColor: "#232627",
   boderinputColor: "#676767",

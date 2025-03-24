@@ -12,6 +12,7 @@ import { Connect, Log } from "./Reducer/UserReducer";
 import packageJson from "../package.json";
 import { Appcontext } from "./Navigation/Appcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Translate } from "./Translate";
 
 const Welcome = (props) => {
   const dispatch = useDispatch();
@@ -56,7 +57,9 @@ const Welcome = (props) => {
       <Image style={styles.image} source={require("../assets/img/logo.png")} />
       <View style={styles.box}>
         <Text style={styles.txt1}>RytonGPT</Text>
-        <Text style={styles.txt2}>Phiên bản {packageJson.version} </Text>
+        <Text style={styles.txt2}>
+          {Translate("version")} {packageJson.version}{"(beta)"}
+        </Text>
       </View>
     </View>
   );

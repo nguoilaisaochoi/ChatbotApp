@@ -18,6 +18,7 @@ import {
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
 import * as Animatable from "react-native-animatable";
+import { Translate } from "./Translate";
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 const Login = (props) => {
@@ -53,7 +54,7 @@ const Login = (props) => {
       setIslog(true);
       dispatch(Log(body));
     } else {
-      Alert.alert("Thông báo", "Hãy nhập đầy đủ thông tin");
+      Alert.alert(Translate("notice"), Translate("pleasefullinfor"));
     }
   };
 
@@ -108,8 +109,6 @@ const Login = (props) => {
         setIsGGSignin(false);
         AsyncStorage.setItem("isLogged", "true");
         console.log("Đăng nhập thành công");
-      } else {
-        Alert.alert("Thông báo", LoginData.messenger);
       }
     }
   }, [LoginStatus]);
@@ -126,13 +125,17 @@ const Login = (props) => {
       )}
       <View style={styles.body}>
         <Animatable.Text animation={"fadeInLeft"} style={styles.welcome}>
-          Đăng nhập{"\n"}tài khoản{"\n"}của bạn
+          {Translate("signin")}
+          {"\n"}
+          {Translate("toyour")}
+          {"\n"}
+          {Translate("account")}
         </Animatable.Text>
         <View>
           <View style={styles.input1}>
             <TextInput
               style={styles.input2}
-              placeholder="Tên tài khoản"
+              placeholder={Translate("username")}
               onChangeText={(data) => setUsername(data)}
             />
           </View>
@@ -140,7 +143,7 @@ const Login = (props) => {
             <TextInput
               secureTextEntry={Showpass == false ? true : false}
               style={styles.input2}
-              placeholder="Mật khẩu"
+              placeholder={Translate("password")}
               onChangeText={(data) => setPassword(data)}
             />
             <TouchableOpacity
@@ -168,7 +171,7 @@ const Login = (props) => {
               login();
             }}
           >
-            <Text style={styles.text}>Đăng nhập</Text>
+            <Text style={styles.text}>{Translate("signin")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.cfgnewacc}
@@ -176,19 +179,19 @@ const Login = (props) => {
             activeOpacity={0.5}
           >
             <Text style={[styles.newacc, { color: "#ACADB9" }]}>
-              Bạn chưa có tài khoản?{" "}
+              {Translate("youdonothaveanaccount")}?{" "}
             </Text>
             <Text
               style={[styles.newacc, { color: "#323142", fontWeight: 700 }]}
             >
-              Đăng ký
+              {Translate("signup")}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
       <View>
         <View style={styles.line} />
-        <Text style={styles.otherlogintxt}>Hoặc đăng nhập bằng</Text>
+        <Text style={styles.otherlogintxt}>{Translate("orsigninwith")}</Text>
         <View style={styles.ggandfb}>
           <TouchableOpacity
             style={[

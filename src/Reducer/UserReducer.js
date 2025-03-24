@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AxiosInstance from "../API/AxiosInstance";
+import { Alert } from "react-native";
+import { Translate } from "../Translate";
 
 export const Reg = createAsyncThunk("user/reg", async (data) => {
   const response = await AxiosInstance.post("user/reg", data);
@@ -25,11 +27,11 @@ export const UserSlice = createSlice({
     LoginStatus: "idle",
     ConnectStatus: "idle",
     ConnectData: {},
-    Theme:false
+    Theme: false,
   },
   reducers: {
     setThemme(state, action) {
-      state.Theme = action.payload; 
+      state.Theme = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -54,7 +56,13 @@ export const UserSlice = createSlice({
       })
       .addCase(Log.rejected, (state, action) => {
         state.LoginStatus = "failed";
-        console.log(action.error.message);
+        if (action.error.message.includes("401")) {
+          Alert.alert(
+            Translate("notice"),
+            Translate("incorrectlogininformation")
+          );
+        }
+        console.log(action.error.code);
       })
       .addCase(Connect.pending, (state, action) => {
         state.ConnectStatus = "loading";
@@ -70,6 +78,5 @@ export const UserSlice = createSlice({
   },
 });
 
-export const { setThemme } = UserSlice.actions
+export const { setThemme } = UserSlice.actions;
 export default UserSlice.reducer;
-
