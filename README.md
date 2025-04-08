@@ -14,7 +14,6 @@
 
 ### **2. Image Analysis**
 - **Visual Recognition**: Upload images, and Ryton GPT can *analyze* and *describe* their content, such as identifying objects, food, or scenes.
-- **Practical Applications**: Useful for identifying dishes (e.g., recognizing *“ikura”* in Japanese cuisine, as seen in the chat), analyzing visual data, or providing insights based on images.
 - **Enhanced Interaction**: Combines image analysis with text-based responses for a *richer* user experience.
 
 ## **Screenshots**
