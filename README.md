@@ -22,28 +22,28 @@
 ### **Welcome Screen**
 The welcome screen greets users upon launching the app, featuring the **Ryton GPT** logo and version information.
 
-<img src="screenshots/welcome-screen.png" alt="Welcome Screen" width="400" />
+<img src="screenshots/welcome-screen.png" alt="Welcome Screen" width="300" />
 
 ### **Chat Interface**
 The main chat interface allows users to interact with **Ryton GPT** seamlessly. You can type messages, upload images, and receive AI-generated responses.
 
-<img src="screenshots/chat-interface.png" alt="Chat Interface" width="400" />
+<img src="screenshots/chat-interface.png" alt="Chat Interface" width="300" />
 
 ### **Chat History**
 Easily access your previous conversations with the *chat history* feature.
 
-<img src="screenshots/chat-history.png" alt="Chat History" width="400" />
+<img src="screenshots/chat-history.png" alt="Chat History" width="300" />
 
 ### **Theme Selection**
 Customize the app's appearance with *light*, *dark*, or *device-based* themes.
 
-<img src="screenshots/theme-selection.png" alt="Theme Selection" width="400" />
+<img src="screenshots/theme-selection.png" alt="Theme Selection" width="300" />
 
 ### **Sign-Up & Sign-In**
 Create an account or sign in to save your chat history and preferences.
 
-<img src="screenshots/sign-up.png" alt="Sign-Up" width="400" />  
-<img src="screenshots/sign-in.png" alt="Sign-In" width="400" />
+<img src="screenshots/sign-up.png" alt="Sign-Up" width="300" />  
+<img src="screenshots/sign-in.png" alt="Sign-In" width="300" />
 
 ## **Getting Started**
 
