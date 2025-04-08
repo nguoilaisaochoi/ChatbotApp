@@ -22,28 +22,28 @@
 ### **Welcome Screen**
 The welcome screen greets users upon launching the app, featuring the **Ryton GPT** logo and version information.
 
-![Welcome Screen](screenshots/welcome-screen.png)
+<img src="screenshots/welcome-screen.png" alt="Welcome Screen" width="400" />
 
 ### **Chat Interface**
 The main chat interface allows users to interact with **Ryton GPT** seamlessly. You can type messages, upload images, and receive AI-generated responses.
 
-![Chat Interface](screenshots/chat-interface.png)
+<img src="screenshots/chat-interface.png" alt="Chat Interface" width="400" />
 
 ### **Chat History**
 Easily access your previous conversations with the *chat history* feature.
 
-![Chat History](screenshots/chat-history.png)
+<img src="screenshots/chat-history.png" alt="Chat History" width="400" />
 
 ### **Theme Selection**
 Customize the app's appearance with *light*, *dark*, or *device-based* themes.
 
-![Theme Selection](screenshots/theme-selection.png)
+<img src="screenshots/theme-selection.png" alt="Theme Selection" width="400" />
 
 ### **Sign-Up & Sign-In**
 Create an account or sign in to save your chat history and preferences.
 
-![Sign-Up](screenshots/sign-up.png)  
-![Sign-In](screenshots/sign-in.png)
+<img src="screenshots/sign-up.png" alt="Sign-Up" width="400" />  
+<img src="screenshots/sign-in.png" alt="Sign-In" width="400" />
 
 ## **Getting Started**
 
@@ -59,7 +59,9 @@ Create an account or sign in to save your chat history and preferences.
 
 ## **Example Interaction**
 - **User**: *“Đây là gì?”* (Uploads an image of a dish)  
-- **Ryton GPT**: Đây là một món ăn có thành phần chính là **trứng cá hồi**, thường được gọi là *“ikura”* trong ẩm thực Nhật Bản. Trứng cá hồi có **màu cam đỏ đặc trưng** và thường được phục vụ trong các món *sushi*, *sashimi* hoặc kèm với cơm. Món ăn này cũng được trang trí bằng một **nhánh thảo mộc xanh** ở phía trên.
+- **Ryton GPT**: Đây là một món ăn có thành phần chính là **trứng cá hồi**, thường được gọi là *“ikura”* trong ẩm thực Nhật Bản. Trứng cá hồi có **màu cam đỏ đặc trưng** và thường được phục vụ trong các
+
+ món *sushi*, *sashimi* hoặc kèm với cơm. Món ăn này cũng được trang trí bằng một **nhánh thảo mộc xanh** ở phía trên.
 
 ## **Requirements**
 - **Operating System**: Android 5.0+ 
