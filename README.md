@@ -59,9 +59,7 @@ Create an account or sign in to save your chat history and preferences.
 
 ## **Example Interaction**
 - **User**: *“Đây là gì?”* (Uploads an image of a dish)  
-- **Ryton GPT**: Đây là một món ăn có thành phần chính là **trứng cá hồi**, thường được gọi là *“ikura”* trong ẩm thực Nhật Bản. Trứng cá hồi có **màu cam đỏ đặc trưng** và thường được phục vụ trong các
-
- món *sushi*, *sashimi* hoặc kèm với cơm. Món ăn này cũng được trang trí bằng một **nhánh thảo mộc xanh** ở phía trên.
+- **Ryton GPT**: Đây là một món ăn có thành phần chính là **trứng cá hồi**, thường được gọi là *“ikura”* trong ẩm thực Nhật Bản. Trứng cá hồi có **màu cam đỏ đặc trưng** và thường được phục vụ trong các món *sushi*, *sashimi* hoặc kèm với cơm. Món ăn này cũng được trang trí bằng một **nhánh thảo mộc xanh** ở phía trên.
 
 ## **Requirements**
 - **Operating System**: Android 5.0+ 
